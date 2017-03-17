@@ -1,0 +1,38 @@
+{
+    "name": "dvizh/yii2-shop",
+    "description": "Admin panel for a shop, based on Yii2",
+    "keywords": ["yii2", "yii 2", "application", "backend", "crud", "shop", "module", "dvizh"],
+    "homepage": "https://github.com/dvizh/yii2-shop",
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "support": {
+        "source": "https://github.com/dvizh/yii2-shop"
+    },
+    "authors": [
+        {
+            "name": "Ilya Pistol",
+            "email": "dvizh@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "2amigos/yii2-grid-view-library": "*",
+        "kartik-v/yii2-widget-select2": "*",
+        "trntv/yii2-file-kit": "@stable",
+        "league/flysystem": "*"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "autoload": {
+        "psr-4": {
+            "dvizh\\shop\\": "src/"
+        }
+    },
+    "extra": {
+        "bootstrap": "dvizh\\shop\\Bootstrap"
+    }
+}
