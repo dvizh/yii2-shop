@@ -3,8 +3,98 @@ namespace dvizh\shop\models;
 
 use dvizh\shop\models\product\ProductQuery;
 
-class Product extends \yii\db\ActiveRecord implements \dvizh\dic\interfaces\cart\CartElement
+class Product extends \yii\db\ActiveRecord  implements \dvizh\dic\interfaces\entity\SoldGoods
 {
+    public function getItemId()
+    {
+        return $this->id;
+    }
+
+    public static function getById($id) : ?\dvizh\dic\interfaces\entity\SoldGoods
+    {
+        return self::findOne($id);
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function getBasePrice()
+    {
+        return $this->price;
+    }
+
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    public function getModelName()
+    {
+        return self::className();
+    }
+
+    public function getOptions() : array
+    {
+        return [];
+    }
+
+    public function getDescription()
+    {
+        return '';
+    }
+
+    public function setModelName($modelName)
+    {
+
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function setItemId($itemId)
+    {
+
+    }
+
+    public function setCount($count)
+    {
+
+    }
+
+    public function setBasePrice($basePrice)
+    {
+
+    }
+
+    public function setPrice($price)
+    {
+
+    }
+
+    public function setOptions($options)
+    {
+
+    }
+
+    public function setDescription($description)
+    {
+
+    }
+
+    public function saveData()
+    {
+        return $this->save();
+    }
+
     public static function tableName()
     {
         return '{{%shop_product}}';
@@ -48,79 +138,8 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\dic\interfaces\cart
         ];
     }
 
-    public function setPrice($price)
-    {
-        $this->price = $price;
-        $this->save(false);
-        
-        return $this;
-    }
-    
-    public function minusAmount($count)
-    {
-        $this->amount = $this->amount-$count;
-        $this->save(false);
-        
-        return $this;
-    }
-    
-    public function plusAmount($count)
-    {
-        $this->amount = $this->amount+$count;
-        $this->save(false);
-        
-        return $this;
-    }
-
-    public function getProduct()
-    {
-        return $this;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getCount()
-    {
-        return 1;
-    }
-
-    public function getPrice()
-    {
-        return $this->price;
-    }
-    
-    public function getOptions()
-    {
-        $options = [];
-
-        return $options;
-    }
-    
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getModelName()
-    {
-        return self::className();
-    }
-
-    public function getSellModel()
-    {
-        return $this;
-    }
-
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
-    }
-
-    public function getModel()
-    {
-        return $this;
     }
 }
