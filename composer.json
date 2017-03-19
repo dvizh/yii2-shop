@@ -11,18 +11,19 @@
     "authors": [
         {
             "name": "Ilya Pistol",
-            "email": "dvizh@gmail.com"
+            "email": "admin@nethammer.ru"
         }
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.1",
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap": "*",
         "2amigos/yii2-grid-view-library": "*",
         "kartik-v/yii2-widget-select2": "*",
         "trntv/yii2-file-kit": "@stable",
-        "league/flysystem": "*"
+        "league/flysystem": "*",
+        "dvizh/yii2-bootstrap": "*"
     },
     "config": {
         "process-timeout": 1800

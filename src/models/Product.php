@@ -3,14 +3,14 @@ namespace dvizh\shop\models;
 
 use dvizh\shop\models\product\ProductQuery;
 
-class Product extends \yii\db\ActiveRecord  implements \dvizh\dic\interfaces\entity\SoldGoods
+class Product extends \yii\db\ActiveRecord  implements \dvizh\app\interfaces\entities\Goods
 {
     public function getItemId()
     {
         return $this->id;
     }
 
-    public static function getById($id) : ?\dvizh\dic\interfaces\entity\SoldGoods
+    public static function getById($id) : ?\dvizh\app\interfaces\entities\Goods
     {
         return self::findOne($id);
     }

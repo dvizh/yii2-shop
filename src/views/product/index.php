@@ -1,12 +1,10 @@
 <?php
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use dvizh\shop\models\ProductOption;
 use dvizh\shop\models\Category;
 use dvizh\shop\models\Producer;
 use dvizh\shop\models\Price;
-use kartik\export\ExportMenu;
 
 $this->title = 'Товары';
 $this->params['breadcrumbs'][] = $this->title;
@@ -14,25 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 \dvizh\shop\assets\BackendAsset::register($this);
 ?>
 <div class="product-index">
-    <div class="row">
-        <div class="col-md-2">
-            <?= Html::a('Добавить товар', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
-        <div class="col-md-10">
-            <?=$this->render('../parts/menu');?>
-        </div>
-    </div>
-    
-    <?php if($totalAmount) { ?>
-        <div class="summary">
-            Всего товаров:
-            <?=$totalAmount;?>
-            на сумму
-            <?=$totalPrice;?> руб.
-        </div>
-    <?php } ?>
-    
-    <br style="clear: both;"></div>
     <?php
     echo \kartik\grid\GridView::widget([
         'dataProvider' => $dataProvider,
