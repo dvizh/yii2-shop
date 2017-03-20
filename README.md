@@ -12,7 +12,7 @@ php composer require dvizh/yii2-shop
 Миграция:
 
 ```
-php yii migrate --migrationPath=vendor/dvizh/yii2-micro-shop/migrations
+php yii migrate --migrationPath=vendor/dvizh/yii2-shop/src/migrations
 ```
 
 Настройка
@@ -24,7 +24,7 @@ php yii migrate --migrationPath=vendor/dvizh/yii2-micro-shop/migrations
     'modules' => [
         //..
         'shop' => [
-            'class' => 'dvizh\microshop\Module',
+            'class' => 'dvizh\shop\Module',
             'adminRoles' => ['administrator'],
         ],
         'gallery' => [
