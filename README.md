@@ -45,7 +45,7 @@ git clone https://github.com/dvizh/yii2-shop.git
 Миграция:
 
 ```
-php yii migrate --migrationPath=vendor/dvizh/yii2-shop/migrations
+php yii migrate --migrationPath=vendor/dvizh/yii2-shop/src/migrations
 ```
 
 Настройка
