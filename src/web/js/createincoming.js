@@ -15,6 +15,7 @@ dvizh.createincoming = {
             }
         });
     },
+    shopPriceTypesArray: [],
     findProduct: function() {
         var input = $(this);
         productCode = $(this).val();
@@ -39,12 +40,22 @@ dvizh.createincoming = {
         $(this).parents('.incoming-row').remove();
         return false;
     },
-    renderRow: function(id, name, code) {
+    renderRow: function(id, name, code, prices) {
         if(!$('.hidden-incoming-product-id[value='+id+']').length) {
             var input = '<input class="hidden-incoming-product-id" type="hidden" value="'+id+'" />';
             var count = '<input type="text" name="element['+id+']" value="1" style="width: 30px;" />';
-            var price = '<input type="text" name="price['+id+']" value="" style="width: 60px;" placeholder="Цена" />';
-            $('#incoming-list').append('<div class="row incoming-row"><div class="col-lg-6 col-xs-6">'+input+id+'. <strong>'+name+'</strong> ('+code+') </div><div class="col-lg-2 col-xs-2"> '+count+' </div><div class="col-lg-2 col-xs-2"> '+price+' </div><div class="col-lg-2 col-xs-2"> <a href="#" class="delete-incoming-row" style="font-weight: bold; color: red;">X</a> </div></div>');
+            
+            var price = '';
+            $(dvizh.createincoming.shopPriceTypesArray).each(function(i, el) {
+                console.log(this);
+                price += '<input type="text" name="price['+id+']['+this.id+']" value="" style="width: 80px;" title="'+this.name+'" placeholder="'+this.name+'" />';
+            });
+            
+            if(code) {
+                code = '('+code+')';
+            }
+            
+            $('#incoming-list').append('<div class="row incoming-row"><div class="col-md-3">'+input+id+'. <strong>'+name+'</strong> '+code+'</div><div class="col-md-1"> '+count+' </div><div class="col-md-7"> '+price+' </div><div class="col-md-1"> <a href="#" class="delete-incoming-row" style="font-weight: bold; color: red;">X</a> </div></div>');
         }
         return true;
     }

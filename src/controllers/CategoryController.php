@@ -3,8 +3,8 @@
 namespace dvizh\shop\controllers;
 
 use Yii;
-use dvizh\shop\models\category\CategorySearch;
 use dvizh\shop\models\Category;
+use dvizh\shop\models\category\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,7 +21,7 @@ class CategoryController extends Controller
                     [
                         'allow' => true,
                         'roles' => $this->module->adminRoles,
-                    ]
+                    ],
                 ]
             ],
             'verbs' => [
@@ -42,15 +42,6 @@ class CategoryController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    public function actionView($slug)
-    {
-        $model = $this->findModelBySlug($slug);
-
-        return $this->render('view', [
-            'model' => $model,
         ]);
     }
 
@@ -92,6 +83,17 @@ class CategoryController extends Controller
         $model = new Category;
         
         if (($model = $model::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested product does not exist.');
+        }
+    }
+    
+    protected function findModelBySlug($slug)
+    {
+        $model = new Category;
+        
+        if (($model = $model::findOne(['slug' => $slug])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested product does not exist.');

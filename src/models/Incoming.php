@@ -1,6 +1,8 @@
 <?php
 namespace dvizh\shop\models;
 
+use Yii;
+
 class Incoming extends \yii\db\ActiveRecord
 {
     

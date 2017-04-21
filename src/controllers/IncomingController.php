@@ -67,9 +67,13 @@ class IncomingController extends Controller
                     $model->product_id = $id;
                 }
                 
-                if($price = $post['price'][$id]) {
-                    $product->setPrice($price);
-                    $model->price = $price;
+                if($prices = $post['price'][$id]) {
+                    foreach($prices as $typeTypeId => $price) {
+                        if($price) {
+                            $product->setPrice($price, $typeTypeId);
+                            $model->price = $price;
+                        }
+                    }
                 }
                 
                 if($model->save()) {

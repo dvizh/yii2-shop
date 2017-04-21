@@ -1,6 +1,6 @@
 {
     "name": "dvizh/yii2-shop",
-    "description": "Admin panel for a shop, based on Yii2",
+    "description": "yii2-shop it's a module for site shop backend",
     "keywords": ["yii2", "yii 2", "application", "backend", "crud", "shop", "module", "dvizh"],
     "homepage": "https://github.com/dvizh/yii2-shop",
     "type": "yii2-extension",
@@ -16,21 +16,37 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.1",
+        "php": ">=5.4.0",
         "yiisoft/yii2": "*",
         "yiisoft/yii2-bootstrap": "*",
         "2amigos/yii2-grid-view-library": "*",
+        "dvizh/yii2-gallery": "*",
+        "dvizh/yii2-tree": "*",
+        "dvizh/yii2-promocode": "*",
+        "dvizh/yii2-seo": "*",
+        "dvizh/yii2-filter": "*",
+        "dvizh/yii2-field": "*",
+        "kartik-v/yii2-grid": "*",
+        "dvizh/yii2-relations": "*",
+        "voskobovich/yii2-many-many-behavior": "^3.0",
         "kartik-v/yii2-widget-select2": "*",
+        "asofter/yii2-imperavi-redactor": "dev-master@dev",
+        "zelenin/yii2-slug-behavior": "~1.5.1",
+        "kartik-v/yii2-export": "@dev",
+        "kartik-v/yii2-mpdf": "@dev",
         "trntv/yii2-file-kit": "@stable",
-        "league/flysystem": "*",
-        "dvizh/yii2-bootstrap": "*"
+        "league/flysystem": "*"
+    },
+    "require-dev": {
+        "yiisoft/yii2-debug": "*",
+        "yiisoft/yii2-gii": "*"
     },
     "config": {
         "process-timeout": 1800
     },
     "autoload": {
         "psr-4": {
-            "dvizh\\shop\\": "src/"
+            "dvizh\\shop\\": "src\\"
         }
     },
     "extra": {

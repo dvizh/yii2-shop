@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\select2\Select2;
 use dvizh\shop\models\Product;
+use dvizh\shop\models\PriceType;
 
 $this->title = 'Новое поступление';
 $this->params['breadcrumbs'][] = $this->title;
@@ -12,8 +13,16 @@ $this->params['breadcrumbs'][] = $this->title;
 \dvizh\shop\assets\CreateIncomingAsset::register($this);
 \dvizh\shop\assets\BackendAsset::register($this);
 
+$priceTypes = [];
+
+foreach(PriceType::find()->all() as $priceType) {
+    $priceTypes[] = ['id' => $priceType->id, 'name' => $priceType->name];
+}
+
 $this->registerJs(
     "
+    dvizh.createincoming.shopPriceTypesArray = ".json_encode($priceTypes)."
+    
     $('.incoming-delete').on('click', function() {
         
     });
@@ -25,11 +34,11 @@ $this->registerJs(
 ?>
 <div class="incoming-create">
     
-    <?php if(Yii::$app->session->hasFlash('success')): ?>
+    <?php if(Yii::$app->session->hasFlash('success')) { ?>
         <div class="alert alert-success" role="alert">
             <?= Yii::$app->session->getFlash('success') ?>
         </div>
-    <?php endif; ?>
+    <?php } ?>
     
 
     

@@ -6,6 +6,18 @@ use yii\db\ActiveQuery;
 
 class ProductQuery extends ActiveQuery
 {
+    function behaviors()
+    {
+       return [
+           'filter' => [
+               'class' => 'dvizh\filter\behaviors\Filtered',
+           ],
+           'field' => [
+               'class' => 'dvizh\field\behaviors\Filtered',
+           ],
+       ];
+    }
+    
     public function available()
     {
          return $this->andwhere("`available` = 'yes'");
@@ -14,15 +26,5 @@ class ProductQuery extends ActiveQuery
     public function category($childCategoriesIds)
     {
          return $this->andwhere(['category_id' => $childCategoriesIds]);
-    }
-    
-    public function getTotalPrice()
-    {
-        return $this->sum("price*amount");
-    }
-    
-    public function getTotalAmount()
-    {
-        return $this->sum("amount");
     }
 }

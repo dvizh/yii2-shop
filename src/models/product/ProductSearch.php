@@ -12,8 +12,8 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['id', 'category_id', 'price', 'amount'], 'integer'],
-            [['name', 'text', 'available', 'code'], 'safe'],
+            [['id', 'category_id', 'producer_id', 'price'], 'integer'],
+            [['name', 'text', 'short_text', 'available', 'code'], 'safe'],
         ];
     }
 
@@ -24,7 +24,7 @@ class ProductSearch extends Product
 
     public function search($params)
     {
-        $query = Product::find();
+        $query = Product::find()->with('prices');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -32,8 +32,6 @@ class ProductSearch extends Product
                 'attributes' => [
                     'name',
                     'id',
-                    'price',
-                    'amount',
                     'available',
                 ],
             ])
@@ -49,12 +47,13 @@ class ProductSearch extends Product
             'id' => $this->id,
             'category_id' => $this->category_id,
             'available' => $this->available,
-            'amount' => $this->amount,
+            'producer_id' => $this->producer_id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'text', $this->text])
-            ->andFilterWhere(['like', 'code', $this->code]);
+            ->andFilterWhere(['like', 'code', $this->code])
+            ->andFilterWhere(['like', 'short_text', $this->short_text]);
 
         return $dataProvider;
     }
