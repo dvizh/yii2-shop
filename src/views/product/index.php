@@ -178,7 +178,7 @@ echo \kartik\grid\GridView::widget([
                         <?php } ?>
                     </div>
                     <div class="tab-pane" id="product-more-fields">
-                        <?php if(!empty($filters)) { ?>
+                        <?php if(!empty($model)) { ?>
                             <div class="row pistol88-mass-edit-more-fields">
                                 <div class="col-sm-12">
                                     <b>Поля</b>
