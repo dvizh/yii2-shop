@@ -41,3 +41,16 @@
 .product-updater .tab-pane {
     padding: 8px;
 }
+
+.modal-mass-update {
+    width: 90%;
+}
+
+.cm-check-items:hover {
+    cursor: pointer;
+}
+
+.product-form-mass {
+    padding-left: 100px;
+    padding-right: 100px;
+}
