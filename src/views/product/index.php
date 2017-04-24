@@ -36,16 +36,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             ?>
             <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle pistol88-mass-controls disabled" data-toggle="dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle dvizh-mass-controls disabled" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-cog "></span>
                     <span class="caret "></span>
                 </button>
-                <ul class="dropdown-menu pistol88-model-control">
+                <ul class="dropdown-menu dvizh-model-control">
                     <li data-action="edit">
-                        <a data-toggle="modal" data-target="#modal-control-model" data-model="<?= $dataProvider->query->modelClass ?>" class="pistol88-mass-edit" href="#">Редактиовать выбранные</a>
+                        <a data-toggle="modal" data-target="#modal-control-model" data-model="<?= $dataProvider->query->modelClass ?>" class="dvizh-mass-edit" href="#">Редактиовать выбранные</a>
                     </li>
                     <li data-action="delete" >
-                        <a  data-model="<?= $dataProvider->query->modelClass ?>" data-action="<?= Url::to(['/shop/product/mass-deletion']) ?>" class="pistol88-mass-delete" href="#">Удалить выбранные</a>
+                        <a  data-model="<?= $dataProvider->query->modelClass ?>" data-action="<?= Url::to(['/shop/product/mass-deletion']) ?>" class="dvizh-mass-delete" href="#">Удалить выбранные</a>
                     </li>
                 </ul>
             </div>
@@ -140,7 +140,7 @@ echo \kartik\grid\GridView::widget([
                 <div class="tab-content product-updater">
                     <div class="tab-pane active" id="product-fields">
                         <?php if(!empty($model)) { ?>
-                            <div class="row pistol88-mass-edit-filds">
+                            <div class="row dvizh-mass-edit-filds">
                                 <?php foreach ($model->attributeLabels() as $nameAttribute => $labelAttribute) { ?>
                                     <?php if($nameAttribute === 'amount_in_stock') continue; ?>
                                     <div class="col-sm-4">
@@ -156,7 +156,7 @@ echo \kartik\grid\GridView::widget([
                     </div>
                     <div class="tab-pane" id="product-filters">
                         <?php if(!empty($filters)) { ?>
-                            <div class="row pistol88-mass-edit-filters">
+                            <div class="row dvizh-mass-edit-filters">
                                 <div class="col-sm-12">
                                     <b>Фильтры</b>
                                 </div>
@@ -179,7 +179,7 @@ echo \kartik\grid\GridView::widget([
                     </div>
                     <div class="tab-pane" id="product-more-fields">
                         <?php if(!empty($model)) { ?>
-                            <div class="row pistol88-mass-edit-more-fields">
+                            <div class="row dvizh-mass-edit-more-fields">
                                 <div class="col-sm-12">
                                     <b>Поля</b>
                                 </div>

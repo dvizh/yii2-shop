@@ -1,11 +1,11 @@
-if (typeof pistol88 == "undefined" || !pistol88) {
-    var pistol88 = {};
+if (typeof dvizh == "undefined" || !dvizh) {
+    var dvizh = {};
 }
 
-pistol88.shop = {
+dvizh.shop = {
     init: function() {
         $(document).on('change', 'table input:checkbox', this.checkSelectedRows);
-        $(document).on('click', '.pistol88-mass-delete', this.massDeletion);
+        $(document).on('click', '.dvizh-mass-delete', this.massDeletion);
         $(document).on('click', '.doc-delete', this.docDeletion);
         $(document).on('click', '.pistoll88-shop-edit-mass-form', this.editingSelectedFields);
         $(document).on('click', '.cm-off', this.uncheckAllCheckboxes);
@@ -21,13 +21,13 @@ pistol88.shop = {
         $('table input:checkbox:checked').each(function(){
             modelId.push($(this).val());
         });
-        $('.pistol88-mass-edit-filds input:checkbox:checked').each(function(){
+        $('.dvizh-mass-edit-filds input:checkbox:checked').each(function(){
             attributes[$(this).val()] = $(this).val();
         });
-        $('.pistol88-mass-edit-filters input:checkbox:checked').each(function(){
+        $('.dvizh-mass-edit-filters input:checkbox:checked').each(function(){
             filtersId[$(this).val()] = $(this).val();
         });
-        $('.pistol88-mass-edit-more-fields input:checkbox:checked').each(function(){
+        $('.dvizh-mass-edit-more-fields input:checkbox:checked').each(function(){
             fieldsId[$(this).val()] = $(this).val();
         });
 
@@ -46,13 +46,13 @@ pistol88.shop = {
     },
     uncheckAllCheckboxes: function () {
         var type = $(this).data('type');
-        $('.pistol88-mass-edit-'+type+' input:checkbox:checked').each(function(){
+        $('.dvizh-mass-edit-'+type+' input:checkbox:checked').each(function(){
             $(this).prop("checked", false)
         });
     },
     selectAllCheckboxes: function () {
         var type = $(this).data('type');
-        $('.pistol88-mass-edit-'+type+' input:checkbox').each(function(){
+        $('.dvizh-mass-edit-'+type+' input:checkbox').each(function(){
             $(this).prop("checked", true)
         });
     },
@@ -67,9 +67,9 @@ pistol88.shop = {
         });
 
         if (empty === false) {
-            $('.pistol88-mass-controls').removeClass( "disabled");
+            $('.dvizh-mass-controls').removeClass( "disabled");
         } else {
-            $('.pistol88-mass-controls').addClass( "disabled");
+            $('.dvizh-mass-controls').addClass( "disabled");
         }
     },
     massDeletion: function () {
@@ -95,4 +95,4 @@ pistol88.shop = {
     },
 };
 
-pistol88.shop.init();
+dvizh.shop.init();
