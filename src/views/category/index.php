@@ -14,8 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="category-index">
     
     <div class="row">
-        <div class="col-md-1">
-            <?php if(yii::$app->request->get('view') == 'list') { ?>
+        <?php if(yii::$app->request->get('view') == 'list') { ?>
+            <div class="col-md-1">
                 <?= Html::tag('button', 'Удалить', [
                     'class' => 'btn btn-success dvizh-mass-delete',
                     'disabled' => 'disabled',
@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'model' => $dataProvider->query->modelClass,
                     ],
                 ]) ?>
-            <?php } ?>
-        </div>
+            </div>
+        <?php } ?>
         <div class="col-md-2">
             <?= Html::a('Создать категорию', ['create'], ['class' => 'btn btn-success']) ?>
         </div>
