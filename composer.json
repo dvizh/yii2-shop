@@ -4,7 +4,7 @@
     "keywords": ["yii2", "yii 2", "application", "backend", "crud", "shop", "module", "dvizh"],
     "homepage": "https://github.com/dvizh/yii2-shop",
     "type": "yii2-extension",
-    "license": "BSD-3-Clause",
+    "license": "Apache",
     "support": {
         "source": "https://github.com/dvizh/yii2-shop"
     },

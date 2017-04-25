@@ -99,8 +99,6 @@ Yii::setAlias('@storageUrl','/frontend/web/images');
     ]
 ```
 
-В shop можно передать modelMap, где указать нужные вам модели. Также можно указать стандартные yiiшные controllerMap, viewPath, чтобы подменить контроллеры и вьюхи своими в процессе развития вашего магазина.
-
 В секцию components:
 
 ```

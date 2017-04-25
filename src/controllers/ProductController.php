@@ -94,7 +94,6 @@ class ProductController extends Controller
 
     public function actionFormMassUpdate()
     {
-
         $session = Yii::$app->session;
         if (Yii::$app->request->post()) {
             $models = Yii::$app->request->post('Product');
@@ -135,8 +134,6 @@ class ProductController extends Controller
                 ]);
             }
         }
-
-
     }
 
     public function actionMassUpdate()
@@ -165,6 +162,7 @@ class ProductController extends Controller
                 return $this->redirect(['form-mass-update']);
             }
         }
+
         return  false;
     }
 
@@ -219,6 +217,7 @@ class ProductController extends Controller
             $productEvent = new ProductEvent(['model' => $model]);
             $this->module->trigger($module::EVENT_PRODUCT_DELETE, $productEvent);
         }
+
         return $this->redirect(['index']);
     }
 
@@ -271,6 +270,7 @@ class ProductController extends Controller
                 return  true;
             }
         }
+
         return  false;
     }
 }
