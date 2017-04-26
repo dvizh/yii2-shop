@@ -47,9 +47,8 @@ class ModificationController extends Controller
 
         $model->product_id = (int)$productId;
         $model->available = 'yes';
-        
-        $productModel = new Product;
-        $productModel = $productModel::findOne($productId);
+
+        $productModel = Product::findOne($productId);
         
         if (!$productModel) {
             throw new NotFoundHttpException('The requested product does not exist.');
@@ -67,6 +66,12 @@ class ModificationController extends Controller
         $model = new Modification;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if($prices = yii::$app->request->post('Price')) {
+                foreach($prices as $typeId => $price) {
+                    $model->setPrice($price['price'], $typeId);
+                }
+            }
+
             $this->redirect(Yii::$app->request->referrer);
         }
         

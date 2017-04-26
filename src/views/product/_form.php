@@ -55,9 +55,7 @@ use dvizh\seo\widgets\SeoForm;
             <?= $form->field($model, 'sort')->textInput() ?>
         </div>
     </div>
-    
 
-	
     <div class="row">
         <div class="col-lg-6 col-xs-6">
             <?= $form->field($model, 'category_id')

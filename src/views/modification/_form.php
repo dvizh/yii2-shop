@@ -1,8 +1,11 @@
 <?php
-use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use dvizh\shop\models\PriceType;
+use dvizh\shop\models\Price;
 
+$priceTypes = PriceType::find()->all();
+$priceModel = new Price;
 ?>
 <div class="product-add-modification-form">
     <?php $form = ActiveForm::begin(); ?>
@@ -38,27 +41,34 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'product_id')->textInput(['type' => 'hidden'])->label(false) ?>
 
         <div class="row form-group">
-            <div class="col-md-6 col-xs-6">
+            <div class="col-xs-9">
                 <?= $form->field($model, 'name')->textInput(['placeholder' => 'Наименование']) ?>
             </div>
-            <div class="col-md-3 col-xs-3">
+            <div class="col-xs-3">
                 <?= $form->field($model, 'code')->textInput() ?>
-            </div>
-            <div class="col-md-3 col-xs-3">
-                <?= $form->field($model, 'sort')->textInput() ?>
             </div>
         </div>
         <div class="row form-group">
-            <div class="col-md-3 col-xs-3">
-                <?= $form->field($model, 'price')->textInput(['value' => $productModel->price]) ?>
-            </div>
-            <div class="col-md-3 col-xs-3">
+            <div class="col-xs-2">
                 <?= $form->field($model, 'amount')->textInput() ?>
             </div>
-            <div class="col-md-3 col-xs-3">
+            <div class="col-xs-2">
                 <?= $form->field($model, 'available')->radioList(['yes' => 'Да','no' => 'Нет']); ?>
             </div>
+            <div class="col-xs-2">
+                <?= $form->field($model, 'sort')->textInput() ?>
+            </div>
         </div>
+
+        <div class="row form-group">
+            <?php if(isset($priceTypes) && !empty($priceTypes)) { ?>
+                <?php $i = 1; foreach($priceTypes as $priceType) { ?>
+                    <div class="col-md-3 col-xs-3">
+                        <?= $form->field($priceModel, "[{$priceType->id}]price")->label($priceType->name); ?>
+                    </div>
+                    <?php $i++; } ?>
+            <?php } ?>
+        <div>
     </fieldset>
     
     <div class="form-group" style="text-align: right;">

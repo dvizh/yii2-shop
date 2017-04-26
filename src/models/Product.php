@@ -4,7 +4,6 @@ namespace dvizh\shop\models;
 use Yii;
 use yii\helpers\Url;
 use dvizh\shop\models\product\ProductQuery;
-use yii\db\ActiveQuery;
 
 class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interfaces\Torelate, \dvizh\cart\interfaces\CartElement
 {
@@ -113,47 +112,37 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
     {
         if($priceModel = $this->getPriceModel($type)) {
             $priceModel->price = $price;
+
             return $priceModel->save(false);
-        } else {
+        } elseif($type) {
+            //Создаем новую цену
             if($typeModel = PriceType::findOne($type)) {
                 $priceModel = new Price;
                 $priceModel->product_id = $this->id;
                 $priceModel->price = $price;
                 $priceModel->type_id = $type;
+                $priceModel->type = 'p';
                 $priceModel->name = $typeModel->name;
-                
+
                 return $priceModel->save();
             }
-
         }
         
-        return false;
+        return null;
     }
     
     public function getPriceModel($typeId = null)
     {
-        if(!$typeId) {
-            $typeId = yii::$app->getModule('shop')->defaultPriceTypeId;
-        }
-
-        $prices = $this->getPrices();
-
-        if(!$prices->count()) {
+        if(!$typeId && !$typeId = yii::$app->getModule('shop')->defaultPriceTypeId) {
             return null;
         }
 
-        if($typeId) {
-            $price = $prices->where(['type_id' => $typeId])->one();
-        } else {
-            $price = $prices->orderBy('sort DESC')->one();
-        }
-        
-        return $price;
+        return $this->getPrices()->where(['type_id' => $typeId])->one();
     }
     
     public function getPrices()
     {
-        return $this->hasMany(Price::className(), ['product_id' => 'id']);
+        return $this->hasMany(Price::className(), ['product_id' => 'id'])->where(['type' => 'p']);
     }
 
     public function getPrice($type = null)
@@ -267,41 +256,9 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
     public function afterDelete()
     {
         parent::afterDelete();
-        
+
+        Modification::deleteAll(["product_id" => $this->id]);
         Price::deleteAll(["product_id" => $this->id]);
-        
-        return false;
-    }
-
-    public function plusAmountInStock($stock, $count)
-    {
-        if($profuctInStock = StockToProduct::find()->where(['product_id' => $this->id, 'stock_id' => $stock])->one()){
-            $profuctInStock->amount = $profuctInStock->amount+$count;
-            
-        } else {
-            $profuctInStock = new StockToProduct();
-            $profuctInStock->amount = $count;
-            $profuctInStock->stock_id = $stock;
-            $profuctInStock->product_id = $this->id;
-        }
-        
-        return $profuctInStock;
-    }
-
-    public function minusAmountInStock($stock, $count)
-    {
-        if($profuctInStock = StockToProduct::find()->where(['product_id' => $this->id, 'stock_id' => $stock])->one()){
-            if($profuctInStock->amount >= $count){
-                $profuctInStock->amount = $profuctInStock->amount - $count;
-
-            } else {
-               return 'На складе всего '.$profuctInStock->amount.' единиц товара. Пытались снять '.$count; 
-            }
-        } else {
-            return 'На складе нету такого товара. Пытались снять '.$count;
-        }
-        
-        return $profuctInStock->save();
     }
 
     public function afterSave($insert, $changedAttributes)
@@ -320,7 +277,5 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
                 ])->execute();
             }
         }
-        
-        return true;
     }
 }

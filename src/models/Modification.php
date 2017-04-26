@@ -2,11 +2,6 @@
 namespace dvizh\shop\models;
 
 use Yii;
-use yii\helpers\Url;
-use dvizh\shop\models\Category;
-use dvizh\shop\models\Price;
-use dvizh\shop\models\product\ProductQuery;
-use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
 
@@ -49,7 +44,6 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
         return [
             [['name', 'product_id'], 'required'],
             [['sort', 'amount', 'product_id'], 'integer'],
-            [['price', 'price_old'], 'number'],
             [['name', 'available', 'code', 'create_time', 'update_time', 'filter_values'], 'string'],
             [['name'], 'string', 'max' => 55],
             [['slug'], 'string', 'max' => 88]
@@ -63,8 +57,6 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
             'product_id' => 'Товар',
             'name' => 'Название',
             'code' => 'Код (актикул)',
-            'price' => 'Цена',
-            'price_old' => 'Старая цена',
             'images' => 'Картинки',
             'available' => 'В наличии',
             'sort' => 'Сортировка',
@@ -107,12 +99,70 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
         
         return $this->save(false);
     }
-    
+
+    public function setPrice($price, $type = null)
+    {
+        if($priceModel = $this->getPriceModel($type)) {
+            $priceModel->price = $price;
+            return $priceModel->save(false);
+        } else {
+            if($typeModel = PriceType::findOne($type)) {
+                $priceModel = new Price;
+                $priceModel->product_id = $this->id;
+                $priceModel->price = $price;
+                $priceModel->type_id = $type;
+                $priceModel->type = 'm';
+                $priceModel->name = $typeModel->name;
+
+                return $priceModel->save();
+            }
+
+        }
+
+        return false;
+    }
+
+    public function getPriceModel($typeId = null)
+    {
+        if(!$typeId && !$typeId = yii::$app->getModule('shop')->defaultPriceTypeId) {
+            return null;
+        }
+
+        return $this->getPrices()->where(['type_id' => $typeId])->one();
+    }
+
+    public function getPrices()
+    {
+        return $this->hasMany(Price::className(), ['product_id' => 'id'])->where(['type' => 'm']);
+    }
+
+    public function getPrice($type = null)
+    {
+        if($callable = yii::$app->getModule('shop')->priceCallable) {
+            return $callable($this);
+        }
+
+        if($price = $this->getPriceModel($type)) {
+            return $price->price;
+        }
+
+        return null;
+    }
+
+    public function getOldprice($type = null)
+    {
+        if($price = $this->getPriceModel($type)) {
+            return $price->price_old;
+        }
+
+        return null;
+    }
+
     public function getProduct()
     {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+        return $this;
     }
-    
+
     public function getCartId()
     {
         return $this->id;
@@ -141,34 +191,6 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
     public function getSellModel()
     {
         return $this;
-    }
-    
-    public function getPrices()
-    {
-        $return = $this->hasMany(Price::className(), ['product_id' => 'id'])->orderBy('price ASC');
-
-        return $return;
-    }
-    
-    public function getPrice($type = 'lower')
-    {
-        $price = $this->hasOne(Price::className(), ['product_id' => 'product_id']);
-        
-        if($type == 'lower') {
-            $price = $price->orderBy('price ASC')->one();
-        } elseif($type) {
-            $price = $price->where(['type_id' => $type])->one();
-        } elseif($defaultType = yii::$app->getModule('shop')->getPriceTypeId($this)) {
-            $price = $price->where(['type_id' => $defaultType])->one();
-        } else {
-            $price = $price->orderBy('price DESC')->one();
-        }
-        
-        if($price) {
-            return $price->price;
-        }
-        
-        return null;
     }
     
     public function beforeValidate()

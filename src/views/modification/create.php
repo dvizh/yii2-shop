@@ -1,7 +1,6 @@
 <?php
-use yii\helpers\Html;
-
 $this->title = 'Добавить модификацию';
+
 \dvizh\shop\assets\ModificationConstructAsset::register($this);
 ?>
 <div class="product-modification-create">

@@ -84,8 +84,6 @@ class m160521_112619_Mass extends Migration {
                 'images' => Schema::TYPE_TEXT . "",
                 'available' => "enum('yes','no')" . " DEFAULT 'yes'",
                 'sort' => Schema::TYPE_INTEGER . "(11)",
-                'price' => Schema::TYPE_DECIMAL . "(11, 2)",
-                'price_old' => Schema::TYPE_DECIMAL . "(11, 2)",
                 'create_time' => Schema::TYPE_DATETIME,
                 'update_time' => Schema::TYPE_DATETIME,
                 'filter_values' => Schema::TYPE_TEXT,

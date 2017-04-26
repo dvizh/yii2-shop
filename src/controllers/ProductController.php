@@ -68,13 +68,7 @@ class ProductController extends Controller
 
             if($prices = yii::$app->request->post('Price')) {
                 foreach($prices as $typeId => $price) {
-                    $type = PriceType::findOne($typeId);
-                    $price = new $priceModel($price);
-                    $price->type_id = $typeId;
-                    $price->name = $type->name;
-                    $price->sort = $type->sort;
-                    $price->product_id = $model->id;
-                    $price->save();
+                    $model->setPrice($price['price'], $typeId);
                 }
             }
 
@@ -180,7 +174,6 @@ class ProductController extends Controller
         $dataProvider = $searchModel->search($typeParams);
         $priceModel = new Price;
 
-        $modificationModel = new Modification;
         $searchModificationModel = new ModificationSearch();
         $typeParams['ModificationSearch']['product_id'] = $id;
         $modificationDataProvider = $searchModificationModel->search($typeParams);
