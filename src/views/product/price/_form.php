@@ -16,7 +16,7 @@ use dvizh\shop\models\PriceType;
 
     <?= $form->field($model, 'type_id')->dropdownList(ArrayHelper::map(PriceType::find()->all(), 'id', 'name')) ?>
     
-    <?= $form->field($model, 'product_id')->textInput(['type' => 'hidden', 'value' => $productModel->id])->label(false) ?>
+    <?= $form->field($model, 'item_id')->textInput(['type' => 'hidden', 'value' => $productModel->id])->label(false) ?>
     
     <?= $form->field($model, 'name')->textInput(['value' => $model->name?$model->name:'Основная цена']) ?>
 

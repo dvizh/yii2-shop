@@ -7,6 +7,8 @@ use yii\behaviors\TimestampBehavior;
 
 class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interfaces\CartElement
 {
+    const PRICE_TYPE = 'm';
+
     function behaviors()
     {
         return [
@@ -100,6 +102,16 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
         return $this->save(false);
     }
 
+    public function setOldPrice($price, $type = null)
+    {
+        if($priceModel = $this->getPriceModel($type)) {
+            $priceModel->price_old = $price;
+            return $priceModel->save(false);
+        }
+
+        return false;
+    }
+
     public function setPrice($price, $type = null)
     {
         if($priceModel = $this->getPriceModel($type)) {
@@ -108,15 +120,14 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
         } else {
             if($typeModel = PriceType::findOne($type)) {
                 $priceModel = new Price;
-                $priceModel->product_id = $this->id;
+                $priceModel->item_id = $this->id;
                 $priceModel->price = $price;
                 $priceModel->type_id = $type;
-                $priceModel->type = 'm';
+                $priceModel->type = self::PRICE_TYPE;
                 $priceModel->name = $typeModel->name;
 
                 return $priceModel->save();
             }
-
         }
 
         return false;
@@ -128,12 +139,12 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
             return null;
         }
 
-        return $this->getPrices()->where(['type_id' => $typeId])->one();
+        return $this->getPrices()->andWhere(['type_id' => $typeId])->one();
     }
 
     public function getPrices()
     {
-        return $this->hasMany(Price::className(), ['product_id' => 'id'])->where(['type' => 'm']);
+        return $this->hasMany(Price::className(), ['item_id' => 'id'])->where(['type' => self::PRICE_TYPE]);
     }
 
     public function getPrice($type = null)

@@ -108,7 +108,9 @@ use dvizh\seo\widgets\SeoForm;
     <?= $form->field($model, 'short_text')->textInput(['maxlength' => true]) ?>
 
 	<?=Gallery::widget(['model' => $model]); ?>
-    
+
+    <br />
+
     <?= SeoForm::widget([
         'model' => $model, 
         'form' => $form,

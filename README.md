@@ -65,6 +65,7 @@ Yii::setAlias('@storageUrl','/frontend/web/images');
         'shop' => [
             'class' => 'dvizh\shop\Module',
             'adminRoles' => ['administrator', 'superadmin', 'admin'],
+            'defaultPriceType' => 1, //Цена по умолчанию
         ],
         'filter' => [
             'class' => 'dvizh\filter\Module',

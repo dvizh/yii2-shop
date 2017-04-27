@@ -8,7 +8,6 @@ use dvizh\shop\models\PriceType;
 use dvizh\shop\models\Price;
 use dvizh\shop\models\price\PriceSearch;
 use dvizh\shop\models\product\ProductSearch;
-use dvizh\shop\models\stock\StockSearch;
 use dvizh\shop\events\ProductEvent;
 use dvizh\shop\models\modification\ModificationSearch;
 use yii\web\Controller;
@@ -164,13 +163,10 @@ class ProductController extends Controller
     {
         $model = $this->findModel($id);
         $typeParams = Yii::$app->request->queryParams;
-        $typeParams['StockSearch']['product_id'] = $id;
-        $StockSearch = new StockSearch();
-        $StockDataProvider = $StockSearch->search($typeParams);
 
         $searchModel = new PriceSearch();
         $typeParams = Yii::$app->request->queryParams;
-        $typeParams['PriceSearch']['product_id'] = $id;
+        $typeParams['PriceSearch']['item_id'] = $id;
         $dataProvider = $searchModel->search($typeParams);
         $priceModel = new Price;
 
@@ -195,8 +191,6 @@ class ProductController extends Controller
                 'dataProvider' => $dataProvider,
                 'searchModel' => $searchModel,
                 'priceModel' => $priceModel,
-                'StockSearch' => $StockSearch,
-                'StockDataProvider' => $StockDataProvider,
             ]);
         }
     }

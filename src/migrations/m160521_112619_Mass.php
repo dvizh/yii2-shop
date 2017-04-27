@@ -61,6 +61,7 @@ class m160521_112619_Mass extends Migration {
             ]);
             
             $this->createIndex('id', '{{%shop_category}}', 'id,parent_id', 0);
+
             $this->createTable('{{%shop_price}}', [
                 'id' => Schema::TYPE_PK . "",
                 'code' => Schema::TYPE_STRING . "(155) NOT NULL",
@@ -70,7 +71,7 @@ class m160521_112619_Mass extends Migration {
                 'sort' => Schema::TYPE_INTEGER . "(11)",
                 'amount' => Schema::TYPE_INTEGER . "(11)",
                 'type_id' => Schema::TYPE_INTEGER . "(11)",
-                'product_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
+                'item_id' => Schema::TYPE_INTEGER . "(11) NOT NULL",
                 'available' => "enum('yes','no')" . " DEFAULT 'yes'",
                 ], $tableOptions);
 
@@ -89,7 +90,8 @@ class m160521_112619_Mass extends Migration {
                 'filter_values' => Schema::TYPE_TEXT,
                 ], $tableOptions);
             
-            $this->createIndex('product_id', '{{%shop_price}}', 'product_id', 0);
+            $this->createIndex('item_id', '{{%shop_price}}', 'item_id', 0);
+
             $this->createTable('{{%shop_producer}}', [
                 'id' => Schema::TYPE_PK . "",
 				'code' => Schema::TYPE_STRING . "(155)",
@@ -151,33 +153,26 @@ class m160521_112619_Mass extends Migration {
             $this->addForeignKey(
                 'fk_producer', '{{%shop_product}}', 'producer_id', '{{%shop_producer}}', 'id', 'CASCADE', 'CASCADE'
             );
-            
-            $this->addForeignKey(
-                'fk_product', '{{%shop_price}}', 'product_id', '{{%shop_product}}', 'id', 'CASCADE', 'CASCADE'
-            );
-            
+
             $this->addForeignKey(
                 'fk_type', '{{%shop_price}}', 'type_id', '{{%shop_price_type}}', 'id', 'CASCADE', 'CASCADE'
             );
-            
-            $this->addForeignKey(
-                'fk_category', '{{%shop_product_to_category}}', 'category_id', '{{%shop_category}}', 'id', 'CASCADE', 'CASCADE'
-            );
-            
-            $this->addForeignKey(
-                'fk_product', '{{%shop_product_modification}}', 'product_id', '{{%shop_product}}', 'id', 'CASCADE', 'CASCADE'
-            );
-            
-            $this->addForeignKey(
-                'fk_product', '{{%shop_product_to_category}}', 'product_id', '{{%shop_product}}', 'id', 'CASCADE', 'CASCADE'
-            );
-            
+
+
             $this->addForeignKey(
                 'fk_stock', '{{%shop_stock_to_user}}', 'stock_id', '{{%shop_stock}}', 'id', 'CASCADE', 'CASCADE'
             );
-			
+
             $this->addForeignKey(
                 'fk_product', '{{%shop_product_modification}}', 'product_id', '{{%shop_product}}', 'id', 'CASCADE', 'CASCADE'
+            );
+
+            $this->addForeignKey(
+                'fk_cat_to_product', '{{%shop_product_to_category}}', 'product_id', '{{%shop_product}}', 'id', 'CASCADE', 'CASCADE'
+            );
+
+            $this->addForeignKey(
+                'fk_cat_to_product_2', '{{%shop_product_to_category}}', 'category_id', '{{%shop_category}}', 'id', 'CASCADE', 'CASCADE'
             );
             
         } catch (Exception $e) {
@@ -199,6 +194,8 @@ class m160521_112619_Mass extends Migration {
             $this->dropTable('{{%shop_product_modification}}');
             $this->dropTable('{{%shop_stock}}');
             $this->dropTable('{{%shop_stock_to_product}}');
+            $this->dropTable('{{%shop_price_type}}');
+
         } catch (Exception $e) {
             echo 'Catch Exception ' . $e->getMessage() . ' ';
         }

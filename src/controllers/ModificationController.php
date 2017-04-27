@@ -41,7 +41,14 @@ class ModificationController extends Controller
         $model = new Modification;
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if($prices = yii::$app->request->post('Price')) {
+                foreach($prices as $typeId => $price) {
+                    $model->setPrice($price['price'], $typeId);
+                }
+            }
+
             yii::$app->session->setFlash('modification-success-added', 'Модификация успешно добавлена', false);            
+
             return '<script>parent.document.location = "'.Url::to(['/shop/product/update', 'id' => $model->product_id]).'";</script>';
         }
 

@@ -14,10 +14,10 @@ class Price extends \yii\db\ActiveRecord implements \dvizh\cart\interfaces\CartE
     public function rules()
     {
         return [
-            [['name', 'product_id'], 'required'],
+            [['name', 'item_id'], 'required'],
             [['name', 'available', 'code'], 'string', 'max' => 100],
             [['price', 'price_old'], 'number'],
-            [['product_id', 'amount', 'type_id'], 'integer'],
+            [['item_id', 'amount', 'type_id'], 'integer'],
         ];
     }
 
@@ -27,7 +27,7 @@ class Price extends \yii\db\ActiveRecord implements \dvizh\cart\interfaces\CartE
             'id' => 'ID',
             'name' => 'Название',
             'type_id' => 'Тип',
-            'product_id' => 'Продукт',
+            'item_id' => 'Продукт',
             'price' => 'Цена',
             'price_old' => 'Старая цена',
             'code' => 'Артикул',
@@ -70,7 +70,7 @@ class Price extends \yii\db\ActiveRecord implements \dvizh\cart\interfaces\CartE
     
     public function getProduct()
     {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+        return $this->hasOne(Product::className(), ['id' => 'item_id']);
     }
     
     public static function editField($id, $name, $value) 

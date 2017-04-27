@@ -7,6 +7,8 @@ use dvizh\shop\models\product\ProductQuery;
 
 class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interfaces\Torelate, \dvizh\cart\interfaces\CartElement
 {
+    const PRICE_TYPE = 'p';
+
     function behaviors()
     {
         return [
@@ -118,10 +120,10 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
             //Создаем новую цену
             if($typeModel = PriceType::findOne($type)) {
                 $priceModel = new Price;
-                $priceModel->product_id = $this->id;
+                $priceModel->item_id = $this->id;
                 $priceModel->price = $price;
                 $priceModel->type_id = $type;
-                $priceModel->type = 'p';
+                $priceModel->type = self::PRICE_TYPE;
                 $priceModel->name = $typeModel->name;
 
                 return $priceModel->save();
@@ -137,12 +139,12 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
             return null;
         }
 
-        return $this->getPrices()->where(['type_id' => $typeId])->one();
+        return $this->getPrices()->andWhere(['type_id' => $typeId])->one();
     }
     
     public function getPrices()
     {
-        return $this->hasMany(Price::className(), ['product_id' => 'id'])->where(['type' => 'p']);
+        return $this->hasMany(Price::className(), ['item_id' => 'id'])->where(['type' => self::PRICE_TYPE]);
     }
 
     public function getPrice($type = null)
@@ -223,15 +225,6 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
         return $return;
     }
 
-    public function getAmount()
-    {   
-        if($amount = StockToProduct::find()->where(['product_id' => $this->id])->sum('amount')){
-            return StockToProduct::find()->where(['product_id' => $this->id])->sum('amount');
-        } else {
-            return 0;
-        }
-    }
-
     public function getLink()
     {
         return Url::toRoute([yii::$app->getModule('shop')->productUrlPrefix, 'slug' => $this->slug]);
@@ -258,7 +251,8 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
         parent::afterDelete();
 
         Modification::deleteAll(["product_id" => $this->id]);
-        Price::deleteAll(["product_id" => $this->id]);
+
+        Price::deleteAll(["item_id" => $this->id]);
     }
 
     public function afterSave($insert, $changedAttributes)
