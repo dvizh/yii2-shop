@@ -218,7 +218,14 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
 
         return parent::beforeValidate();
     }
-    
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        Price::deleteAll(["item_id" => $this->id, 'type' => self::PRICE_TYPE]);
+    }
+
     public static function editField($id, $name, $value) 
     {
         $setting = Modification::findOne($id);

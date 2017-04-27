@@ -252,7 +252,7 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
 
         Modification::deleteAll(["product_id" => $this->id]);
 
-        Price::deleteAll(["item_id" => $this->id]);
+        Price::deleteAll(["item_id" => $this->id, 'type' => self::PRICE_TYPE]);
     }
 
     public function afterSave($insert, $changedAttributes)
