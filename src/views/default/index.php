@@ -4,7 +4,7 @@ use yii\helpers\Url;
 $this->title = 'Магазин';
 $this->params['breadcrumbs'][] = $this->title;
 
-\dvizh\client\assets\BackendAsset::register($this);
+\dvizh\shop\assets\BackendAsset::register($this);
 
 ?>
 <div class="model-index">

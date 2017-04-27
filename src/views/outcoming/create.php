@@ -11,11 +11,11 @@ dvizh\shop\assets\CreateOutcomingAsset::register($this);
 ?>
 
 <div class="incoming-create">
-    <?php if(Yii::$app->session->hasFlash('success')): ?>
+    <?php if(Yii::$app->session->hasFlash('success')) { ?>
         <div class="alert alert-success" role="alert">
             <?= Yii::$app->session->getFlash('success') ?>
         </div>
-    <?php endif; ?>
+    <?php } ?>
     
     <?php $form = ActiveForm::begin(); ?>
         <div class="form-group">

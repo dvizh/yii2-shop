@@ -39,9 +39,7 @@ $this->registerJs(
             <?= Yii::$app->session->getFlash('success') ?>
         </div>
     <?php } ?>
-    
 
-    
     <?php $form = ActiveForm::begin(); ?>
         <div class="form-group">
             <div class="row">
@@ -63,8 +61,7 @@ $this->registerJs(
         </div>
         <div id="incoming-list" style="width: 800px; padding: 20px;">
         </div>
-        
-        
+
         <div class="form-group">
             <textarea name="content" class="form-control" placeholder="Комментарий"></textarea>
         </div>
