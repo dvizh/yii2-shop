@@ -50,7 +50,7 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
     public static function Find()
     {
         $return = new ProductQuery(get_called_class());
-        $return = $return->with('category');
+        //$return = $return->with('category');
         
         return $return;
     }
