@@ -64,7 +64,7 @@ class m160521_112619_Mass extends Migration {
 
             $this->createTable('{{%shop_price}}', [
                 'id' => Schema::TYPE_PK . "",
-                'code' => Schema::TYPE_STRING . "(155) NOT NULL",
+                'code' => Schema::TYPE_STRING . "(155)",
                 'name' => Schema::TYPE_STRING . "(155) NOT NULL",
                 'price' => Schema::TYPE_DECIMAL . "(11, 2)",
                 'price_old' => Schema::TYPE_DECIMAL . "(11, 2)",
