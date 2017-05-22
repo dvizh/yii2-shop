@@ -12,7 +12,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Массовое редактирование продукции';
-
+\dvizh\shop\assets\BackendAsset::register($this);
 ?>
 <div class="product-mass">
     <?php if (isset($models)) { ?>
