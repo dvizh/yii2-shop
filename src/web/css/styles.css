@@ -54,3 +54,66 @@
     padding-left: 100px;
     padding-right: 100px;
 }
+
+/* Стили для массового редактирования */
+
+.product-form-mass .btn {
+    margin-bottom: 15px;
+}
+.product-form-mass .id-item-mass {
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding: 0 15px;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+    margin-top: 0;
+}
+.select2-container--krajee .select2-selection, .select2-container--krajee .select2-search--dropdown .select2-search__field {
+    border-radius: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.select2-container--krajee .select2-dropdown {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.product-form-mass label + label input[type=radio] {
+    margin-left: 8px;
+}
+.product-form-mass input[type=radio] {
+    margin: 4px 5px 0 0;
+    float: left;
+    margin-right: 5px;
+}
+.product-form-mass .dvizh-gallery-item {
+    margin-bottom: 15px;
+}
+.product-form-mass .dvizh-gallery-item {
+    border: 1px solid #333;
+}
+.product-form-mass .dvizh-gallery-item a.delete {
+    position: absolute;
+    right: 3px;
+    left: auto;
+    top: 3px;
+    color: red;
+    font-size: 24px;
+    line-height: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 3px;
+} 
+.product-form-mass .dvizh-gallery-item a.write {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    color: #3c8dbc;
+    font-size: 18px;
+    line-height: 14px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 3px;
+    text-shadow: initial;
+}
+.product-form-mass .dvizh-gallery-item a.write:hover,
+.product-form-mass .dvizh-gallery-item a.delete:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
