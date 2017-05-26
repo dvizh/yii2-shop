@@ -12,7 +12,7 @@ $priceModel = new Price;
 
     <fieldset>
         <legend>1. Выберите значения модификации</legend>
-        <?php if($filters = $productModel->getFilters()) {  ?>
+        <?php if($filters = $productModel->getOptions()) {  ?>
             <div class="filters form-group">
                 <?php foreach($filters as $filter) { ?>
                     <?php if($variants = $filter->variants) { ?>
