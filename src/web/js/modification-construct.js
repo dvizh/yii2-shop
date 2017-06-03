@@ -6,36 +6,32 @@ Array.prototype.diff = function(a) {
 };
 
 dvizh.modificationconstruct = {
-    modifications: null,
+    dvizhShopUpdatePriceUrl: null,
     init: function() {
         $(document).on('change', '.product-add-modification-form .filters select', this.generateName);
         
-        $(document).on("beforeChangeCartElementOptions", function(e, options) {
-            dvizh.modificationconstruct.setModification(options);
+        $(document).on("beforeChangeCartElementOptions", function(e, modelId) {
+            dvizh.modificationconstruct.setModification(modelId);
         });
     },
-    setModification: function(options) {
-        if(dvizh.modificationconstruct.modifications) {
-            var cartOptions = options;
-            $.each(dvizh.modificationconstruct.modifications, function(i, m) {
-                var options = [];
-                $.each(cartOptions, function(i, co) {
-                    options.push(co);
-                });
+    setModification: function(modelId) {
+        var options = $('.dvizh-cart-buy-button'+modelId).data('options');
+        $('.dvizh-shop-price-' + modelId).css('opacity', 0.3);
+        jQuery.post(dvizh.modificationconstruct.dvizhShopUpdatePriceUrl, {options: options, productId: modelId},
+            function (answer) {
+                data = answer;
+                if(data.modification && (data.modification.amount > 0 | data.modification.amount == null)) {
+                    $('.dvizh-shop-price-' + modelId).html(data.modification.price);
+                    $('.dvizh-cart-buy-button' + modelId).data('price', data.modification.price);
+                } else {
+                    $('.dvizh-shop-price-' + modelId).html(data.product_price);
+                    $('.dvizh-cart-buy-button' + modelId).data('price', data.product_price);
 
-                var filter_value = $.makeArray(m.filter_value);
-
-                if(options.length == filter_value.length) {
-                    var result = options.diff(filter_value);
-                    if(result.length == 0) {
-                        if(m.price > 0) {
-                            $('.dvizh-shop-price-'+m.product_id).html(m.price);
-                            $(document).trigger("shopSetModification", m);
-                        }
-                    }
+                    alert("Данной модификации нет в наличии.");
                 }
-            });
-        }
+                $('.dvizh-shop-price-' + modelId).css('opacity', 1);
+
+            }, "json");
     },
     generateName: function() {
         var name = '';

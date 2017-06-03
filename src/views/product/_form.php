@@ -17,10 +17,10 @@ use dvizh\seo\widgets\SeoForm;
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
     
     <div class="row">
-        <div class="col-lg-6 col-xs-6">
+        <div class="col-lg-8 col-xs-6">
             <?= $form->field($model, 'name')->textInput() ?>
         </div>
-        <div class="col-lg-5 col-xs-4">
+        <div class="col-lg-3 col-xs-4">
             <?= $form->field($model, 'slug')->textInput(['placeholder' => 'Не обязательно']) ?>
         </div>
         <div class="col-lg-1 col-xs-4">

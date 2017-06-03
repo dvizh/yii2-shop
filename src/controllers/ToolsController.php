@@ -4,26 +4,52 @@ namespace dvizh\shop\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
+use dvizh\shop\models\Product;
 
 class ToolsController extends Controller
 {
-    public function behaviors()
+    public function actionGetModificationByOptions()
     {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => $this->module->adminRoles,
-                    ]
-                ]
-            ],
-        ];
+        if($product = Product::findOne(yii::$app->request->post('productId'))) {
+            foreach($product->getModifications()->andWhere(['available' => 'yes'])->all() as $modification) {
+                $suitable = true;
+                foreach(yii::$app->request->post('options') as $optionId => $variantId) {
+                    if(!in_array($variantId, $modification->filtervariants)) {
+                        $suitable = false;
+                        break;
+                    }
+                }
+
+                if($suitable) {
+                    return json_encode([
+                        'modification' => [
+                            'id' => $modification->id,
+                            'price' => $modification->price,
+                            'name' => $modification->name,
+                            'code' => $modification->code,
+                            'sku' => $modification->sku,
+                            'barcode' => $modification->barcode,
+                            'amount' => $modification->amount,
+                            'sort' => $modification->sort,
+                        ],
+                        'product_price' => $product->price,
+                    ]);
+                }
+            }
+
+            return json_encode([]);
+        }
+        else {
+            return json_encode([]);
+        }
     }
-    
-    public function actionSync()
+
+    public function actionSync($syncToken = null)
     {
+        if($syncToken != $this->module->syncToken) {
+            return;
+        }
+
         set_time_limit(0);
         $productService = new Product;
         $categoryService = new Category;

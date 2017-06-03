@@ -72,7 +72,7 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
             'filter_values' => 'Сочетание значений фильтров',
         ];
     }
-    
+
     public function getFiltervariants()
     {
         return ArrayHelper::map(ModificationToOption::find()->where(['modification_id' => $this->id])->all(), 'variant_id', 'variant_id');

@@ -20,26 +20,10 @@ class ShowPrice extends \yii\base\Widget
 
     public function run()
     {
-        if($modifications = $this->model->modifications) {
-            $json = [];
-            
-            foreach($modifications as $modification) {
-                $json[$modification->id] = [
-                    'product_id' => $modification->product_id,
-                    'name' => $modification->name,
-                    'code' => $modification->code,
-                    'price' => $modification->price,
-                    'amount' => $modification->amount,
-                    'filter_value' => $modification->filtervariants,
-                ];
-            }
-            
-            $js = 'dvizh.modificationconstruct.modifications = '.json_encode($json).';';
-            
-            $this->getView()->registerJs($js);
-        }
-        
-        
+        $js = 'dvizh.modificationconstruct.dvizhShopUpdatePriceUrl = "' .Url::toRoute(['/shop/tools/get-modification-by-options']). '";';
+
+        $this->getView()->registerJs($js);
+
         return Html::tag(
                 $this->htmlTag,
                 $this->model->getPrice(),
