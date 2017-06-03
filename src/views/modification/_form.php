@@ -45,9 +45,22 @@ $priceModel = new Price;
                 <?= $form->field($model, 'name')->textInput(['placeholder' => 'Наименование']) ?>
             </div>
             <div class="col-xs-3">
-                <?= $form->field($model, 'code')->textInput() ?>
+
             </div>
         </div>
+
+        <div class="row form-group">
+            <div class="col-xs-4">
+                <?= $form->field($model, 'code')->textInput() ?>
+            </div>
+            <div class="col-xs-4">
+                <?= $form->field($model, 'sku')->textInput() ?>
+            </div>
+            <div class="col-xs-4">
+                <?= $form->field($model, 'barcode')->textInput() ?>
+            </div>
+        </div>
+
         <div class="row form-group">
             <div class="col-xs-2">
                 <?= $form->field($model, 'amount')->textInput() ?>

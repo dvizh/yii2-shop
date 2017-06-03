@@ -3,6 +3,7 @@ namespace dvizh\shop\controllers;
 
 use dvizh\shop\models\Modification;
 use dvizh\shop\models\Product;
+use dvizh\shop\models\ModificationToOption;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -47,6 +48,17 @@ class ModificationController extends Controller
                 }
             }
 
+            if($filterValue = yii::$app->request->post('filterValue')) {
+                ModificationToOption::deleteAll(['modification_id' => $model->id]);
+                foreach($filterValue as $filterId => $variantId) {
+                    $rel = new ModificationToOption;
+                    $rel->modification_id = $model->id;
+                    $rel->option_id = $filterId;
+                    $rel->variant_id = $variantId;
+                    $rel->save();
+                }
+            }
+
             yii::$app->session->setFlash('modification-success-added', 'Модификация успешно добавлена', false);            
 
             return '<script>parent.document.location = "'.Url::to(['/shop/product/update', 'id' => $model->product_id]).'";</script>';
@@ -79,6 +91,17 @@ class ModificationController extends Controller
                 }
             }
 
+            if($filterValue = yii::$app->request->post('filterValue')) {
+                ModificationToOption::deleteAll(['modification_id' => $model->id]);
+                foreach($filterValue as $filterId => $variantId) {
+                    $rel = new ModificationToOption;
+                    $rel->modification_id = $model->id;
+                    $rel->option_id = $filterId;
+                    $rel->variant_id = $variantId;
+                    $rel->save();
+                }
+            }
+
             $this->redirect(Yii::$app->request->referrer);
         }
         
@@ -90,10 +113,27 @@ class ModificationController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if($prices = yii::$app->request->post('Price')) {
+                foreach($prices as $typeId => $price) {
+                    $model->setPrice($price['price'], $typeId);
+                }
+            }
+
+            if($filterValue = yii::$app->request->post('filterValue')) {
+                ModificationToOption::deleteAll(['modification_id' => $model->id]);
+                foreach($filterValue as $filterId => $variantId) {
+                    $rel = new ModificationToOption;
+                    $rel->modification_id = $model->id;
+                    $rel->option_id = $filterId;
+                    $rel->variant_id = $variantId;
+                    $rel->save();
+                }
+            }
+
             return $this->redirect(['update', 'id' => $model->id]);
         } else {
             $productModel = $model->product;
-            
+
             return $this->render('update', [
                 'productModel' => $productModel,
                 'module' => $this->module,

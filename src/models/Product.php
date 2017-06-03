@@ -3,6 +3,7 @@ namespace dvizh\shop\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use dvizh\shop\models\product\ProductQuery;
 
 class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interfaces\Torelate, \dvizh\cart\interfaces\CartElement
@@ -60,7 +61,7 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
         return [
             [['name'], 'required'],
             [['category_id', 'producer_id', 'sort', 'amount'], 'integer'],
-            [['text', 'available', 'code', 'is_new', 'is_promo', 'is_popular'], 'string'],
+            [['text', 'available', 'code', 'is_new', 'is_promo', 'is_popular', 'sku', 'barcode'], 'string'],
             [['category_ids'], 'each', 'rule' => ['integer']],
             [['name'], 'string', 'max' => 200],
             [['short_text', 'slug'], 'string', 'max' => 255]
@@ -71,7 +72,9 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
     {
         return [
             'id' => 'ID',
-            'code' => 'Код (актикул)',
+            'code' => 'Идентификатор',
+            'sku'  => 'Артикул',
+            'barcode' => 'Штрихкод',
             'category_id' => 'Главная категория',
             'producer_id' => 'Производитель',
             'name' => 'Название',
@@ -192,13 +195,21 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
     public function getCartOptions()
     {
         $options = [];
-        
-        if($filters = $this->getOptions()) {
+
+        if($this->modifications) {
+            $filters = $this->getAvailableOptions();
+        } else {
+            $filters = $this->getOptions();
+        }
+
+        if($filters) {
             foreach($filters as $filter) {
                 if($variants = $filter->variants) {
                     $options[$filter->id]['name'] = $filter->name;
                     foreach($variants as $variant) {
-                        $options[$filter->id]['variants'][$variant->id] = $variant->value;
+                        if(!$this->modifications | in_array($variant->id, $this->getOptionVariants($filter->id))) {
+                            $options[$filter->id]['variants'][$variant->id] = $variant->value;
+                        }
                     }
                 }
             }
@@ -206,6 +217,22 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
         
         return $options;
         //return ['Цвет' => ['Красный', 'Белый', 'Синий'], 'Размер' => ['XXL']];
+    }
+
+    public function getOptionVariants($optionId)
+    {
+        return ArrayHelper::map(ModificationToOption::find()->where(['option_id' => $optionId, 'modification_id' => ArrayHelper::map($this->modifications, 'id', 'id')])->all(), 'variant_id', 'variant_id');
+    }
+
+    public function getAvailableOptions()
+    {
+        $optionIds = ArrayHelper::map(ModificationToOption::find()->where(['modification_id' => ArrayHelper::map($this->modifications, 'id', 'id')])->all(), 'option_id', 'option_id');
+
+        if(!$optionIds) {
+            return [];
+        }
+
+        return $this->getOptionsByIds($optionIds);
     }
     
     public function getName()

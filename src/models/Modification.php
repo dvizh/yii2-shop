@@ -3,6 +3,7 @@ namespace dvizh\shop\models;
 
 use Yii;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 
 class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interfaces\CartElement
@@ -46,7 +47,7 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
         return [
             [['name', 'product_id'], 'required'],
             [['sort', 'amount', 'product_id'], 'integer'],
-            [['name', 'available', 'code', 'create_time', 'update_time', 'filter_values'], 'string'],
+            [['name', 'available', 'code', 'create_time', 'update_time', 'filter_values', 'sku', 'barcode'], 'string'],
             [['name'], 'string', 'max' => 55],
             [['slug'], 'string', 'max' => 88]
         ];
@@ -58,7 +59,9 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
             'id' => 'ID',
             'product_id' => 'Товар',
             'name' => 'Название',
-            'code' => 'Код (актикул)',
+            'code' => 'Идентификатор',
+            'sku'  => 'Артикул',
+            'barcode' => 'Штрихкод',
             'images' => 'Картинки',
             'available' => 'В наличии',
             'sort' => 'Сортировка',
@@ -72,15 +75,7 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
     
     public function getFiltervariants()
     {
-        $return = [];
-        
-        if($selected = unserialize($this->filter_values)) {
-            foreach($selected as $filter => $value) {
-                $return[] = $value;
-            }
-        }
-        
-        return $return;
+        return ArrayHelper::map(ModificationToOption::find()->where(['modification_id' => $this->id])->all(), 'variant_id', 'variant_id');
     }
     
     public function getId()
@@ -171,7 +166,7 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
 
     public function getProduct()
     {
-        return $this;
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 
     public function getCartId()
@@ -203,26 +198,12 @@ class Modification extends \yii\db\ActiveRecord implements \dvizh\cart\interface
     {
         return $this;
     }
-    
-    public function beforeValidate()
-    {
-        if($filterValue = yii::$app->request->post('filterValue')) {
-            $filter_values = [];
-            foreach($filterValue as $filterId => $variantId) {
-                $filter_values[$filterId] = $variantId;
-            }
-            $this->filter_values = serialize($filter_values);
-        } else {
-            $this->filter_values = serialize([]);
-        }
-
-        return parent::beforeValidate();
-    }
 
     public function afterDelete()
     {
         parent::afterDelete();
 
+        ModificationToOption::deleteAll(['modification_id' => $this->id]);
         Price::deleteAll(["item_id" => $this->id, 'type' => self::PRICE_TYPE]);
     }
 

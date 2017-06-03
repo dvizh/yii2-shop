@@ -20,17 +20,23 @@ use dvizh\seo\widgets\SeoForm;
         <div class="col-lg-6 col-xs-6">
             <?= $form->field($model, 'name')->textInput() ?>
         </div>
-        <div class="col-lg-6 col-xs-6">
+        <div class="col-lg-5 col-xs-4">
             <?= $form->field($model, 'slug')->textInput(['placeholder' => 'Не обязательно']) ?>
         </div>
-    </div>
-	
-    <div class="row">
-        <div class="col-lg-6 col-xs-6">
+        <div class="col-lg-1 col-xs-4">
             <?= $form->field($model, 'amount')->textInput() ?>
         </div>
-        <div class="col-lg-6 col-xs-6">
+    </div>
+
+    <div class="row form-group">
+        <div class="col-xs-4">
             <?= $form->field($model, 'code')->textInput() ?>
+        </div>
+        <div class="col-xs-4">
+            <?= $form->field($model, 'sku')->textInput() ?>
+        </div>
+        <div class="col-xs-4">
+            <?= $form->field($model, 'barcode')->textInput() ?>
         </div>
     </div>
     
