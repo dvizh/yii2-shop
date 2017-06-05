@@ -122,7 +122,7 @@ use dvizh\seo\widgets\SeoForm;
         'form' => $form,
     ]); ?>
     
-    <div class=" panel panel-default">
+    <div class=" panel panel-default related-products-block">
         <div class="panel-heading"><strong>Связанные продукты</strong></div>
         <div class="panel-body">
             <?=\dvizh\relations\widgets\Constructor::widget(['model' => $model]);?>
