@@ -12,11 +12,11 @@ $this->params['breadcrumbs'][] = 'Обновить';
 <div class="product-update">
 
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#product-product" data-toggle="tab">Карточка товара</a></li>
-        <li><a href="#product-modifications" data-toggle="tab">Модификации</a></li>
-        <li><a href="#product-prices" data-toggle="tab">Цены</a></li>
-        <li><a href="#product-filters" data-toggle="tab">Фильтры</a></li>
-        <li><a href="#product-fields" data-toggle="tab">Доп. поля</a></li>
+        <li class="active product-tab-label"><a href="#product-product" data-toggle="tab">Карточка товара</a></li>
+        <li class="options-tab-label"><a href="#product-modifications" data-toggle="tab">Модификации</a></li>
+        <li class="prices-tab-label" ><a href="#product-prices" data-toggle="tab">Цены</a></li>
+        <li class="filters-tab-label"><a href="#product-filters" data-toggle="tab">Фильтры</a></li>
+        <li class="addfileds-tab-label"><a href="#product-fields" data-toggle="tab">Доп. поля</a></li>
     </ul>
 
     <div class="tab-content product-updater">
