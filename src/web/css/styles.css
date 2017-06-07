@@ -117,3 +117,59 @@
 .product-form-mass .dvizh-gallery-item a.delete:hover {
     background: rgba(0, 0, 0, 0.3);
 }
+
+/* Оформление дерева категорий категорий */
+
+.categories-tree {
+    background: #fff;
+    padding: 15px;
+}
+.categories-tree > ul {
+    padding-left: 0;
+    margin-bottom: 0;
+    line-height: 44px;
+}
+.categories-tree > ul > li > .row, 
+.categories-tree > ul > li > .child {
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+}
+.categories-tree > ul > li > .row:hover, 
+.categories-tree > ul > li > .child:hover {
+    background: rgba(238, 238, 238, 0.6);
+}
+.categories-tree > ul > li > .child {
+    padding-right: 15px;
+}
+.categories-tree li:hover, .categories-tree li {
+    border-left: 0;
+    border-right: 0;
+}
+.categories-tree .btn {
+    width: 28px;
+    height: 28px;
+    line-height: 24px;
+}
+.categories-tree form.btn {
+    margin: 8px 0 0 2px;
+    padding: 0;
+    float: right;
+}
+#w4-container .table-bordered>tbody>tr>td {
+    vertical-align: middle;
+}
+#w4-container .table-bordered>tbody>tr>td:last-child {
+    text-align: center;
+}
+#w4-container .table-bordered>tbody>tr>td:last-child a {
+    background-color: #f4f4f4;
+    color: #444;
+    border: 1px solid #ddd;
+    padding: 3px;
+    width: 28px;
+    height: 28px;
+    line-height: 24px;
+    border-radius: 3px;
+    display: inline-block;
+    text-align: center;
+}
