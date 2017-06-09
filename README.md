@@ -40,7 +40,7 @@ git clone https://github.com/dvizh/yii2-shop.git
 
 Модуль зависит от многих других пакетов, скопируйте их из моего в свой composer.json в секцию require. После этого не забудьте выполнить composer update и миграции каждого модуля.
 
-Если хотите установить в папку vendor через composer и ничего не менять потом, устанавливайте стандартно: 'php composer require dvizh/yii2-shop' и 'php composer update' в командной строке.
+Если хотите установить в папку vendor через composer и ничего не менять потом, устанавливайте стандартно: 'php composer require dvizh/yii2-shop "@dev"' в командной строке.
 
 Миграция:
 
