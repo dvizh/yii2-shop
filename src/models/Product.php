@@ -97,6 +97,33 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
         return $this->id;
     }
     
+    public function setAmount($count)
+	{
+		$this->amount = $count;
+		$this->available = $count <= 0 ? 'no' : 'yes';
+		
+		$return = $this->save();
+		
+		if($return) {
+			$prices = Price::find()->where(['item_id' => $this->id])->all();
+		
+			foreach($prices as $price) {
+				if($return) {
+					$price->amount = $count;
+					$price->available = $count <= 0 ? 'no' : 'yes';
+					
+					$return = $price->save();
+				} else {
+					return $return;
+				}
+			}
+			
+			return $return;
+		}
+		
+		return $return;
+	}
+    
     public function minusAmount($count, $moderator="false")
     {
         $this->amount = $this->amount-$count;
