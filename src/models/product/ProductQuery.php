@@ -20,7 +20,7 @@ class ProductQuery extends ActiveQuery
     
     public function available()
     {
-         return $this->andwhere("`available` = 'yes'");
+         return $this->andwhere("{{%shop_product%}}.available = 'yes'");
     }
     
     public function category($childCategoriesIds)
