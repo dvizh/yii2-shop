@@ -8,6 +8,22 @@ use dvizh\shop\models\Product;
 
 class ToolsController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+			'actions' => ['upload-imperavi', 'sync'],
+                        'roles' => $this->module->adminRoles,
+                    ]
+                ]
+            ],
+        ];
+    }
+	
     public function actionGetModificationByOptions()
     {
         if($product = Product::findOne(yii::$app->request->post('productId'))) {
