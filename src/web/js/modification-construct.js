@@ -16,8 +16,9 @@ dvizh.modificationconstruct = {
     },
     setModification: function(modelId) {
         var options = $('.dvizh-cart-buy-button'+modelId).data('options');
+        var csrfToken = yii.getCsrfToken();
         $('.dvizh-shop-price-' + modelId).css('opacity', 0.3);
-        jQuery.post(dvizh.modificationconstruct.dvizhShopUpdatePriceUrl, {options: options, productId: modelId},
+        jQuery.post(dvizh.modificationconstruct.dvizhShopUpdatePriceUrl, {options: options, productId: modelId,  _csrf : csrfToken},
             function (answer) {
                 data = answer;
                 if(data.modification && (data.modification.amount > 0 | data.modification.amount == null)) {
