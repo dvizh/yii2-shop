@@ -233,6 +233,7 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
             foreach($filters as $filter) {
                 if($variants = $filter->variants) {
                     $options[$filter->id]['name'] = $filter->name;
+		    $options[$filter->id]['slug'] = $filter->slug;
                     foreach($variants as $variant) {
                         if(!$this->modifications | in_array($variant->id, $this->getOptionVariants($filter->id))) {
                             $options[$filter->id]['variants'][$variant->id] = $variant->value;
