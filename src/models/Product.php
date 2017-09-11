@@ -42,20 +42,20 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
             ],
         ];
     }
-    
+
     public static function tableName()
     {
         return '{{%shop_product}}';
     }
-    
+
     public static function Find()
     {
         $return = new ProductQuery(get_called_class());
         //$return = $return->with('category');
-        
+
         return $return;
     }
-    
+
     public function rules()
     {
         return [
@@ -91,55 +91,55 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
             'amount_in_stock' => 'Количество на складах',
         ];
     }
-    
+
     public function getId()
     {
         return $this->id;
     }
-    
+
     public function setAmount($count)
 	{
 		$this->amount = $count;
 		$this->available = $count <= 0 ? 'no' : 'yes';
-		
+
 		$return = $this->save();
-		
+
 		if($return) {
 			$prices = Price::find()->where(['item_id' => $this->id])->all();
-		
+
 			foreach($prices as $price) {
 				if($return) {
 					$price->amount = $count;
 					$price->available = $count <= 0 ? 'no' : 'yes';
-					
+
 					$return = $price->save();
 				} else {
 					return $return;
 				}
 			}
-			
+
 			return $return;
 		}
-		
+
 		return $return;
 	}
-    
+
     public function minusAmount($count, $moderator="false")
     {
         $this->amount = $this->amount-$count;
         $this->save(false);
-        
+
         return $this;
     }
-    
+
     public function plusAmount($count, $moderator="false")
     {
         $this->amount = $this->amount+$count;
         $this->save(false);
-        
+
         return $this;
     }
-    
+
     public function setPrice($price, $type = null)
     {
         if($priceModel = $this->getPriceModel($type)) {
@@ -159,10 +159,10 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
                 return $priceModel->save();
             }
         }
-        
+
         return null;
     }
-    
+
     public function getPriceModel($typeId = null)
     {
         if(!$typeId && !$typeId = yii::$app->getModule('shop')->defaultPriceTypeId) {
@@ -171,7 +171,7 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
 
         return $this->getPrices()->andWhere(['type_id' => $typeId])->one();
     }
-    
+
     public function getPrices()
     {
         return $this->hasMany(Price::className(), ['item_id' => 'id'])->where(['type' => self::PRICE_TYPE]);
@@ -186,34 +186,34 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
         if($price = $this->getPriceModel($type)) {
             return $price->price;
         }
-        
+
         return null;
     }
-    
+
     public function getOldprice($type = null)
     {
         if($price = $this->getPriceModel($type)) {
             return $price->price_old;
         }
-        
+
         return null;
     }
-    
+
     public function getProduct()
     {
         return $this;
     }
-    
+
     public function getCartId()
     {
         return $this->id;
     }
-    
+
     public function getCartName()
     {
         return $this->name;
     }
-    
+
     public function getCartPrice()
     {
         return $this->price;
@@ -233,7 +233,7 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
             foreach($filters as $filter) {
                 if($variants = $filter->variants) {
                     $options[$filter->id]['name'] = $filter->name;
-		    $options[$filter->id]['slug'] = $filter->slug;
+		            $options[$filter->id]['slug'] = $filter->slug;
                     foreach($variants as $variant) {
                         if(!$this->modifications | in_array($variant->id, $this->getOptionVariants($filter->id))) {
                             $options[$filter->id]['variants'][$variant->id] = $variant->value;
@@ -242,7 +242,7 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
                 }
             }
         }
-        
+
         return $options;
         //return ['Цвет' => ['Красный', 'Белый', 'Синий'], 'Размер' => ['XXL']];
     }
@@ -262,12 +262,12 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
 
         return $this->getOptionsByIds($optionIds);
     }
-    
+
     public function getName()
     {
         return $this->name;
     }
-    
+
     public function getSellModel()
     {
         return $this;
@@ -289,18 +289,18 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
-    
+
     public function getCategories()
     {
         return $this->hasMany(Category::className(), ['id' => 'category_id'])
              ->viaTable('{{%shop_product_to_category}}', ['product_id' => 'id']);
     }
-    
+
     public function getProducer()
     {
         return $this->hasOne(Producer::className(), ['id' => 'producer_id']);
     }
-    
+
     public function afterDelete()
     {
         parent::afterDelete();
