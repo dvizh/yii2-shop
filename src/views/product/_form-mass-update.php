@@ -1,5 +1,5 @@
 <?php
-use dosamigos\grid\EditableColumn;
+use dosamigos\grid\columns\EditableColumn;
 use kartik\select2\Select2;
 use dvizh\gallery\widgets\Gallery;
 use dvizh\shop\models\Category;
