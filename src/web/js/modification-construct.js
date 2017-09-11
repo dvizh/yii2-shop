@@ -9,15 +9,16 @@ dvizh.modificationconstruct = {
     dvizhShopUpdatePriceUrl: null,
     init: function() {
         $(document).on('change', '.product-add-modification-form .filters select', this.generateName);
-        
+
         $(document).on("beforeChangeCartElementOptions", function(e, modelId) {
             dvizh.modificationconstruct.setModification(modelId);
         });
     },
     setModification: function(modelId) {
         var options = $('.dvizh-cart-buy-button'+modelId).data('options');
+        var csrfToken = yii.getCsrfToken();
         $('.dvizh-shop-price-' + modelId).css('opacity', 0.3);
-        jQuery.post(dvizh.modificationconstruct.dvizhShopUpdatePriceUrl, {options: options, productId: modelId},
+        jQuery.post(dvizh.modificationconstruct.dvizhShopUpdatePriceUrl, {options: options, productId: modelId,  _csrf : csrfToken},
             function (answer) {
                 data = answer;
                 if(data.modification && (data.modification.amount > 0 | data.modification.amount == null)) {
@@ -41,7 +42,7 @@ dvizh.modificationconstruct = {
                 name = name+' '+val;
             }
         });
-        
+
         if(name != '') {
             $('#modification-name').val(name);
         }
