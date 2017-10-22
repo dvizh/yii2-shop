@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]);
     } else {
-        $categories = \dvizh\tree\widgets\Tree::widget(['model' => new \dvizh\shop\models\Category()]);
+        $categories = \dvizh\tree\widgets\Tree::widget();
     }
     
     echo $categories;
