@@ -194,17 +194,7 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
     {
         return PriceType::find()->all();
     }
-
-    public function getPricesId()
-    {
-        $pridesId = null;
-        foreach ($this->getPrices() as $price) {
-            $pridesId[$price->id] = $price->name;
-        }
-
-        return $pridesId;
-    }
-
+    
     public function getPrice($type = null)
     {
         if($callable = yii::$app->getModule('shop')->priceCallable) {
