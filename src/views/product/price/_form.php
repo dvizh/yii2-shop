@@ -9,16 +9,20 @@ use dvizh\shop\models\PriceType;
 /* @var $model common\models\ProductOption */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<a href="#" class="btn btn-success" onclick="$('.product-add-price-form').toggle(); return false;">Добавить <span class="glyphicon glyphicon-plus add-price"></span></a>
-<div class="product-add-price-form" style="display: none;">
-    
+<a href="#" class="btn btn-success" data-role="price-from-btn">Добавить <span class="glyphicon glyphicon-plus add-price"></span></a>
+<div class="product-add-price-form" data-role="price-form" style="display: none;">
+
     <?php $form = ActiveForm::begin(['action' => Url::toRoute(['price/create'])]); ?>
 
-    <?= $form->field($model, 'type_id')->dropdownList(ArrayHelper::map(PriceType::find()->all(), 'id', 'name')) ?>
+    <?= $form->field($model, 'type_id')->dropdownList(ArrayHelper::map(PriceType::find()->all(), 'id', 'name'), [
+        'data-role' => 'type-price',
+        'prompt' => 'Выберете тип цены',
+    ]);
+    ?>
     
     <?= $form->field($model, 'item_id')->textInput(['type' => 'hidden', 'value' => $productModel->id])->label(false) ?>
-    
-    <?= $form->field($model, 'name')->textInput(['value' => $model->name?$model->name:'Основная цена']) ?>
+
+    <?= $form->field($model, 'name')->textInput(['data-role' => 'price-name']) ?>
 
     <?= $form->field($model, 'price')->textInput() ?>
     

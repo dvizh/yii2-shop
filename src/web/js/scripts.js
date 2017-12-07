@@ -3,13 +3,34 @@ if (typeof dvizh == "undefined" || !dvizh) {
 }
 
 dvizh.shop = {
+    priceTypeName: '[data-role=type-price]',
+    namePrice: '[data-role=price-name]',
+    priceFormBtn: '[data-role=price-from-btn]',
+    priceForm: '[data-role=price-form]',
+
     init: function() {
         $(document).on('change', 'table input:checkbox', this.checkSelectedRows);
+        $(document).on('change', dvizh.shop.priceTypeName, this.appointName);
+        $(document).on('click', dvizh.shop.priceFormBtn, this.displayPriceForm);
         $(document).on('click', '.dvizh-mass-delete', this.massDeletion);
-        $(document).on('click', '.doc-delete', this.docDeletion);
         $(document).on('click', '.pistoll88-shop-edit-mass-form', this.editingSelectedFields);
         $(document).on('click', '.cm-off', this.uncheckAllCheckboxes);
         $(document).on('click', '.cm-on', this.selectAllCheckboxes);
+    },
+    displayPriceForm: function () {
+        $(dvizh.shop.priceForm).toggle();
+    },
+    appointName: function () {
+        var self = this,
+            priceTypeName = $(self).find('option:selected').text(),
+            priceTypeValue = $(self).val();
+
+        if(priceTypeValue) {
+            $(dvizh.shop.namePrice).val(priceTypeName);
+        } else {
+            $(dvizh.shop.namePrice).val('');
+        }
+
     },
     editingSelectedFields: function () {
         var model = $(this).data('model'),
