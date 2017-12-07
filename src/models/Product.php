@@ -177,6 +177,24 @@ class Product extends \yii\db\ActiveRecord implements \dvizh\relations\interface
         return $this->hasMany(Price::className(), ['item_id' => 'id'])->where(['type' => self::PRICE_TYPE]);
     }
 
+    public function getUnderchargedPrices()
+    {
+        $underchargedPrices = [];
+        foreach ($this->getPriceTypes() as $priceType) {
+            $price = $this->getPrice($priceType->id);
+            if(empty($price)) {
+                array_push($underchargedPrices, $priceType);
+            }
+        }
+
+        return $underchargedPrices;
+    }
+
+    public function getPriceTypes()
+    {
+        return PriceType::find()->all();
+    }
+    
     public function getPrice($type = null)
     {
         if($callable = yii::$app->getModule('shop')->priceCallable) {

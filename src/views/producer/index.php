@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\export\ExportMenu;
 
 $this->title = 'Производители';
@@ -12,15 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="producer-index">
     
     <div class="row">
-        <div class="col-md-1">
-            <?= Html::tag('button', 'Удалить', [
-                'class' => 'btn btn-success dvizh-mass-delete',
-                'disabled' => 'disabled',
-                'data' => [
-                    'model' => $dataProvider->query->modelClass,
-                ],
-            ]) ?>
-        </div>
         <div class="col-md-2">
             <?= Html::a('Создать производителя', ['create'], ['class' => 'btn btn-success']) ?>
         </div>
@@ -36,6 +28,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => $gridColumns
             ]);
             ?>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle dvizh-mass-controls disabled" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-cog "></span>
+                    <span class="caret "></span>
+                </button>
+                <ul class="dropdown-menu dvizh-model-control">
+                    <li data-action="delete" >
+                        <a  data-model="<?= $dataProvider->query->modelClass ?>" data-action="<?= Url::to(['/shop/product/mass-deletion']) ?>" class="dvizh-mass-delete" href="#">Удалить выбранные</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 

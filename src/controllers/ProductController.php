@@ -161,14 +161,12 @@ class ProductController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-        $typeParams = Yii::$app->request->queryParams;
-
+        $priceModel = new Price;
         $searchModel = new PriceSearch();
+        $model = $this->findModel($id);
         $typeParams = Yii::$app->request->queryParams;
         $typeParams['PriceSearch']['item_id'] = $id;
         $dataProvider = $searchModel->search($typeParams);
-        $priceModel = new Price;
 
         $searchModificationModel = new ModificationSearch();
         $typeParams['ModificationSearch']['product_id'] = $id;
