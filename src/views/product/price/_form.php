@@ -14,7 +14,7 @@ use dvizh\shop\models\PriceType;
 
     <?php $form = ActiveForm::begin(['action' => Url::toRoute(['price/create'])]); ?>
 
-    <?= $form->field($model, 'type_id')->dropdownList(ArrayHelper::map(PriceType::find()->all(), 'id', 'name'), [
+    <?= $form->field($model, 'type_id')->dropdownList(ArrayHelper::map($productModel->getUnderchargedPrices(), 'id', 'name'), [
         'data-role' => 'type-price',
         'prompt' => 'Выберете тип цены',
     ]);
