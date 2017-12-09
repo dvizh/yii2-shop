@@ -78,15 +78,15 @@ class Category extends \yii\db\ActiveRecord
         return $return;
     }
 
-    public static function buildTextTree($groupCategories = [], $parent_id = null, $level = 1, &$treeCategories = [])
+    public static function buildTextTree($groupCategories = [], $id = null, $level = 1, &$treeCategories = [])
     {
-        if($parent_id) {
+        if($id) {
 
-            if (isset($groupCategories[$parent_id])) {
+            if (isset($groupCategories[$id])) {
 
                 $prefix = str_repeat('--', $level);
                 $level++;
-                foreach($groupCategories[$parent_id] as $category){
+                foreach($groupCategories[$id] as $category){
                     $treeCategories[$category['id']] = $prefix.$category['name'];
                     self::buildTextTree($groupCategories, $category['id'], $level, $treeCategories);
                 }
