@@ -77,28 +77,43 @@ class Category extends \yii\db\ActiveRecord
         
         return $return;
     }
-    
-    public static function buildTextTree($id = null, $level = 1, $ban = [])
+
+    public static function buildTextTree($groupCategories = [], $parent_id = null, $level = 1, &$treeCategories = [])
     {
-        $return = [];
-        
-        $prefix = str_repeat('--', $level);
-        $level++;
-        
-        if(empty($id)) {
-            $categories = Category::find()->where('parent_id = 0 OR parent_id is null')->orderBy('sort DESC')->asArray()->all();
-        } else {
-            $categories = Category::find()->where(['parent_id' => $id])->orderBy('sort DESC')->asArray()->all();
-        }
-        
-        foreach($categories as $category) {
-            if(!in_array($category['id'], $ban)) {
-                $return[$category['id']] = "$prefix {$category['name']}";
-                $return = $return + self::buildTextTree($category['id'], $level, $ban);
+        if($parent_id) {
+
+            if (isset($groupCategories[$parent_id])) {
+
+                $prefix = str_repeat('--', $level);
+                $level++;
+                foreach($groupCategories[$parent_id] as $category){
+                    $treeCategories[$category['id']] = $prefix.$category['name'];
+                    self::buildTextTree($groupCategories, $category['id'], $level, $treeCategories);
+                }
             }
+
+            return $treeCategories;
+
+        } else {
+            $treeCategories = [];
+            $groupedCategories = [];
+            $categories = Yii::$app->db->createCommand('SELECT id, parent_id, name FROM shop_category ORDER BY id ASC')->queryAll();
+
+            if (!is_array($categories)) {
+                return false;
+            }
+
+            foreach ($categories as $key => $category) {
+                $groupedCategories[$category['parent_id']][] = $category;
+            }
+
+            foreach ($groupedCategories[''] as $groupedCategory) {
+                $treeCategories[$groupedCategory['id']] = '' . $groupedCategory['name'];
+                $treeCategories = self::buildTextTree($groupedCategories, $groupedCategory['id'], 1, $treeCategories);
+            }
+
+            return $treeCategories;
         }
-        
-        return $return;
     }
 
     public function getProducts()

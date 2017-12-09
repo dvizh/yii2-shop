@@ -78,7 +78,7 @@ $this->title = 'Массовое редактирование продукции
                 <div class="row">
                     <?php if (isset($attributes['category_id'])) { ?>
                         <div class="col-sm-4">
-                            <?= $form->field($model, 'category_id')
+                            <?= $form->field($model, "[{$model->id}][Product]category_id")
                                 ->widget(Select2::classname(), [
                                     'data' => Category::buildTextTree(),
                                     'language' => 'ru',
