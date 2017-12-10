@@ -97,7 +97,7 @@ class Category extends \yii\db\ActiveRecord
         } else {
             $treeCategories = [];
             $groupedCategories = [];
-            $categories = Yii::$app->db->createCommand('SELECT id, parent_id, name FROM shop_category ORDER BY id ASC')->queryAll();
+            $categories = Category::find()->where('parent_id = 0 OR parent_id is null')->orderBy('sort DESC')->asArray()->all();
 
             if (!is_array($categories)) {
                 return false;
