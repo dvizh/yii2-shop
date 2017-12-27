@@ -83,6 +83,7 @@ class Category extends \yii\db\ActiveRecord
     public static function buildTextTree($id = null, $level = 1, $ban = [])
     {
         $return = [];
+        $categories = null;
 
         $prefix = str_repeat('--', $level);
         $level++;
@@ -98,7 +99,9 @@ class Category extends \yii\db\ActiveRecord
             $categories = $groupedCategories[''];
 
         } else {
-            $categories = self::$categoriesByParent[$id];
+            if(isset(self::$categoriesByParent[$id])) {
+                $categories = self::$categoriesByParent[$id];
+            }
         }
 
         if (is_null($categories)) {
