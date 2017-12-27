@@ -85,78 +85,36 @@ class ProductController extends Controller
         }
     }
 
-    public function actionFormMassUpdate()
-    {
-        $session = Yii::$app->session;
-        if (Yii::$app->request->post()) {
-            $models = Yii::$app->request->post('Product');
-            if(!empty($models)) {
-                foreach ($models as $key => $model) {
-                    $modeFind = $session['massUpdate']['model'];
-                    $newModel = $modeFind::findOne(['id' => $key]);
-                    if (!empty($newModel)) {
-                        $newModel->load($model);
-                        $newModel->save();
-                    }
-                }
-            }
-            $session->remove('massUpdate');
-            $this->redirect(['index']);
-        }
-
-        $session = Yii::$app->session;
-        if (isset($session['massUpdate'])) {
-            $massUpdate = $session['massUpdate'];
-            if (isset($massUpdate['modelId']) && isset($massUpdate['attributes']) && isset($massUpdate['model'])) {
-                $modelId = $massUpdate['modelId'];
-                $attributes = $massUpdate['attributes'];
-                $filters = $massUpdate['filters'];
-                $fields = $massUpdate['fields'];
-                $modelName = $massUpdate['model'];
-                $models = $modelName::findAll($modelId);
-                array_push($attributes, 'images');
-                unset($attributes['amount_in_stock']);
-
-                return $this->render('_form-mass-update', [
-                    'modelId' => $modelId,
-                    'attributes' => $attributes,
-                    'filters' => $filters,
-                    'fields' => $fields,
-                    'modelName' => $modelName,
-                    'models' => $models,
-                ]);
-            }
-        }
-    }
-
     public function actionMassUpdate()
     {
-        $filters = NULL;
-        $fields = NULL;
-        $postData = \Yii::$app->request->post();
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $model = $postData['model'];
-        $modelId = $postData['modelId'];
-        $attributes = $postData['attributes'];
-        if(isset($postData['filters'])) $filters = $postData['filters'];
-        if(isset($postData['fields'])) $fields = $postData['fields'];
+        $partForm = null;
+        $entitiesName = ['modelsId', 'attributes', 'otherEntities', 'filters', 'fields'];
+        $postData = Yii::$app->request->post();
 
-        if(!empty($modelId) && !empty($model) && !empty($attributes)) {
-            $ranks = $model::findAll($modelId);
-            $session = Yii::$app->session;
-            $session['massUpdate'] = [
-                'model' => $model,
-                'modelId' => $modelId,
-                'attributes' => $attributes,
-                'filters' => $filters,
-                'fields' => $fields,
-            ];
-            if(!empty($ranks)) {
-                return $this->redirect(['form-mass-update']);
-            }
+        foreach ($entitiesName as $name) {
+            $allEntities[$name] = explode(',', $postData[$name]);
         }
 
-        return  false;
+        $models = Product::findAll($allEntities['modelsId']);
+
+        if(isset($postData['Product'])) {
+            foreach ($models as $model) {
+                $newData = $postData['Product'][$model->id];
+                foreach ($newData as $name => $value) {
+                    $model->$name = $value;
+                }
+                $model->save();
+            }
+            $models = Product::findAll($allEntities['modelsId']);
+
+        }
+
+        return $this->render('_form-mass-update', [
+            'models' => $models,
+            'allEntities' => $allEntities,
+            'entitiesName' => $entitiesName,
+            'postData' => $postData,
+        ]);
     }
 
     public function actionUpdate($id)

@@ -59,7 +59,9 @@ class Category extends \yii\db\ActiveRecord
             'description' => 'Описание',
         ];
     }
-    
+
+    private static $categoriesByParent = null;
+
     public static function buildTree($parent_id = null)
     {
         $return = [];
@@ -77,27 +79,39 @@ class Category extends \yii\db\ActiveRecord
         
         return $return;
     }
-    
+
     public static function buildTextTree($id = null, $level = 1, $ban = [])
     {
         $return = [];
-        
+
         $prefix = str_repeat('--', $level);
         $level++;
-        
-        if(empty($id)) {
-            $categories = Category::find()->where('parent_id = 0 OR parent_id is null')->orderBy('sort DESC')->asArray()->all();
+
+        if (empty($id)) {
+            $categories = Category::find()->select(['id', 'parent_id', 'name'])->orderBy('sort DESC')->asArray()->all();
+
+            foreach ($categories as $key => $category) {
+                $groupedCategories[$category['parent_id']][] = $category;
+            }
+
+            self::$categoriesByParent = $groupedCategories;
+            $categories = $groupedCategories[''];
+
         } else {
-            $categories = Category::find()->where(['parent_id' => $id])->orderBy('sort DESC')->asArray()->all();
+            $categories = self::$categoriesByParent[$id];
         }
-        
-        foreach($categories as $category) {
-            if(!in_array($category['id'], $ban)) {
+
+        if (is_null($categories)) {
+            return $return;
+        }
+
+        foreach ($categories as $category) {
+            if (!in_array($category['id'], $ban)) {
                 $return[$category['id']] = "$prefix {$category['name']}";
                 $return = $return + self::buildTextTree($category['id'], $level, $ban);
             }
         }
-        
+
         return $return;
     }
 
