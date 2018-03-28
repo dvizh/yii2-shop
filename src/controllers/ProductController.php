@@ -88,15 +88,13 @@ class ProductController extends Controller
     public function actionMassUpdate()
     {
         $partForm = null;
+        $allEntities = null;
         $entitiesName = ['modelsId', 'attributes', 'otherEntities', 'filters', 'fields'];
-        $postData = Yii::$app->request->post();
-
+        $postData = \Yii::$app->request->post();
         foreach ($entitiesName as $name) {
             $allEntities[$name] = explode(',', $postData[$name]);
         }
-
         $models = Product::findAll($allEntities['modelsId']);
-
         if(isset($postData['Product'])) {
             foreach ($models as $model) {
                 $newData = $postData['Product'][$model->id];
@@ -106,7 +104,6 @@ class ProductController extends Controller
                 $model->save();
             }
             $models = Product::findAll($allEntities['modelsId']);
-
         }
 
         return $this->render('_form-mass-update', [

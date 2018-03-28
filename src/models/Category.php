@@ -84,7 +84,7 @@ class Category extends \yii\db\ActiveRecord
     {
         $return = [];
         $categories = null;
-
+        $groupedCategories = null;
         $prefix = str_repeat('--', $level);
         $level++;
 

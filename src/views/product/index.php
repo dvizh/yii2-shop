@@ -123,6 +123,16 @@ echo \kartik\grid\GridView::widget([
 <div class="modal fade" id="modal-control-model">
     <div class="modal-dialog modal-mass-update">
         <div class="modal-content">
+            <div class="notification-error text-center" style="display: none;">
+                <div class="col-xs-12 alert alert-danger">
+                    <button class="close">×</button>
+                    <div class="glyphicon glyphicon-exclamation-sign"></div>
+                    Вы ничего не выбрали
+                    <div>
+                    </div>
+
+                </div>
+            </div>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="modal-title">Выберите поля для редактирования</h3>
@@ -131,18 +141,36 @@ echo \kartik\grid\GridView::widget([
                     которые нужно отредактировать, и нажмите на кнопку
                     "Редактировать выбранные".</p>
             </div>
-            <div class="modal-body">
-                <ul class="nav nav-tabs">
+            <div class="modal-body mass-update-body">
+                <ul class="nav nav-tabs nav-mass-update">
                     <li class="active"><a href="#product-fields" data-toggle="tab">Поля</a></li>
                     <li><a href="#product-filters" data-toggle="tab">Фильтры</a></li>
                     <li><a href="#product-more-fields" data-toggle="tab">Доп. поля</a></li>
+                    <li>
+                        <a href="#empty">
+                            <?=  Html::checkbox('images', false, [
+                                'label' => 'Картинки',
+                                'value' => 'images',
+                                'class' => 'dvizh-mass-edit-images'
+                            ]) ?>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#empty">
+                            <?=  Html::checkbox('prices', false, [
+                                'label' => 'Цены',
+                                'value' => 'prices',
+                                'class' => 'dvizh-mass-edit-prices'
+                            ]) ?>
+                        </a>
+                    </li>
                 </ul>
                 <div class="tab-content product-updater">
                     <div class="tab-pane active" id="product-fields">
                         <?php if(!empty($model)) { ?>
                             <div class="row dvizh-mass-edit-filds">
                                 <?php foreach ($model->attributeLabels() as $nameAttribute => $labelAttribute) { ?>
-                                    <?php if($nameAttribute === 'amount_in_stock') continue; ?>
+                                    <?php if(ArrayHelper::isIn($nameAttribute, $ignoreAttribute)) continue; ?>
                                     <div class="col-sm-4">
                                         <?=  Html::checkbox($nameAttribute, true, ['label' => $labelAttribute, 'value' => $nameAttribute,]) ?>
                                     </div>
@@ -157,9 +185,6 @@ echo \kartik\grid\GridView::widget([
                     <div class="tab-pane" id="product-filters">
                         <?php if(!empty($filters)) { ?>
                             <div class="row dvizh-mass-edit-filters">
-                                <div class="col-sm-12">
-                                    <b>Фильтры</b>
-                                </div>
                                 <?php foreach ($filters as $filter) { ?>
                                     <div class="col-sm-4">
                                         <?=  Html::checkbox($filter->slug, false, [
@@ -178,34 +203,52 @@ echo \kartik\grid\GridView::widget([
                         <?php } ?>
                     </div>
                     <div class="tab-pane" id="product-more-fields">
-                        <?php if(!empty($model)) { ?>
-                            <div class="row dvizh-mass-edit-more-fields">
-                                <div class="col-sm-12">
-                                    <b>Поля</b>
+                        <div class="row dvizh-mass-edit-more-fields">
+                            <?php foreach ($model->getFields() as $filter) { ?>
+                                <div class="col-sm-4">
+                                    <?=  Html::checkbox($filter->slug, false, [
+                                        'label' => $filter->name,
+                                        'value' => $filter->id,
+                                    ]) ?>
                                 </div>
-                                <?php foreach ($model->getFields() as $filter) { ?>
-                                    <div class="col-sm-4">
-                                        <?=  Html::checkbox($filter->slug, false, [
-                                            'label' => $filter->name,
-                                            'value' => $filter->id,
-                                        ]) ?>
-                                    </div>
-                                <?php } ?>
-                                <div class="col-sm-12">
-                                    <p class="cm-check-items-group">
-                                        <a class="cm-check-items cm-on" data-type="more-fields">Выбрать все</a> |
-                                        <a class="cm-check-items cm-off" data-type="more-fields">Снять выделение со всех</a>
-                                    </p>
-                                </div>
+                            <?php } ?>
+                            <div class="col-sm-12">
+                                <p class="cm-check-items-group">
+                                    <a class="cm-check-items cm-on" data-type="more-fields">Выбрать все</a> |
+                                    <a class="cm-check-items cm-off" data-type="more-fields">Снять выделение со всех</a>
+                                </p>
                             </div>
-                        <?php } ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="product-images">
+                        <div class="row dvizh-mass-edit-images">
+                            <div class="col-sm-4">
+                                <?=  Html::checkbox('images', false, ['label' => 'Картинки', 'value' => 'images']) ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="product-prices">
+                        <div class="row dvizh-mass-edit-prices">
+                            <div class="col-sm-12">
+                                <b>Цены</b>
+                            </div>
+                            <div class="col-sm-4">
+                                <?=  Html::checkbox('prices', false, ['label' => 'Цены', 'value' => 'prices']) ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="modal-footer">
+                <?= Html::a(null, ['product/mass-update'], [
+                    'data-method' => 'POST',
+                    'data-params' => null,
+                    'data-role' => 'link-mass-update'
+                ]) ?>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                <button type="button" data-action="<?= Url::to(['/shop/product/mass-update']) ?>" data-model="<?= $dataProvider->query->modelClass ?>" class="btn btn-primary pistoll88-shop-edit-mass-form">Редактировать выбранные</button>
+                <button type="button" class="btn btn-primary dvizh-mass-update-btn">Редактировать выбранные</button>
+
             </div>
         </div>
     </div>
-</div>
