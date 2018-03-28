@@ -7,16 +7,19 @@ dvizh.shop = {
     namePrice: '[data-role=price-name]',
     priceFormBtn: '[data-role=price-from-btn]',
     priceForm: '[data-role=price-form]',
+    linkMassUpdate: '[data-role=link-mass-update]',
 
     init: function() {
         $(document).on('change', 'table input:checkbox', this.checkSelectedRows);
         $(document).on('change', dvizh.shop.priceTypeName, this.appointName);
         $(document).on('click', dvizh.shop.priceFormBtn, this.displayPriceForm);
         $(document).on('click', '.dvizh-mass-delete', this.massDeletion);
-        $(document).on('click', '.pistoll88-shop-edit-mass-form', this.editingSelectedFields);
+        $(document).on('click', '.dvizh-mass-update-btn', this.sendInMassUpdate);
         $(document).on('click', '.cm-off', this.uncheckAllCheckboxes);
         $(document).on('click', '.cm-on', this.selectAllCheckboxes);
+        $(document).on('click', '.notification-error', this.showNotification);
     },
+
     displayPriceForm: function () {
         $(dvizh.shop.priceForm).toggle();
     },
@@ -32,38 +35,52 @@ dvizh.shop = {
         }
 
     },
-    editingSelectedFields: function () {
-        var model = $(this).data('model'),
-            action = $(this).data('action'),
-            modelId = [],
-            attributes = {},
-            filtersId = {},
-            fieldsId = {};
+    sendInMassUpdate: function () {
+        var images = $('.dvizh-mass-edit-images:checked').val(),
+            prices = $('.dvizh-mass-edit-prices:checked').val(),
+            otherEntities = [],
+            modelsId = [],
+            attributes = [],
+            filtersId = [],
+            fieldsId = [];
+
         $('table input:checkbox:checked').each(function(){
-            modelId.push($(this).val());
+            modelsId.push($(this).val());
         });
         $('.dvizh-mass-edit-filds input:checkbox:checked').each(function(){
-            attributes[$(this).val()] = $(this).val();
+            attributes.push($(this).val());
         });
         $('.dvizh-mass-edit-filters input:checkbox:checked').each(function(){
-            filtersId[$(this).val()] = $(this).val();
+            filtersId.push($(this).val());
         });
         $('.dvizh-mass-edit-more-fields input:checkbox:checked').each(function(){
-            fieldsId[$(this).val()] = $(this).val();
+            fieldsId.push($(this).val());
         });
 
-        if(JSON.stringify(attributes) != "{}" && modelId.length != 0) {
-            $.post({
-                url: action,
-                data: {
-                    modelId: modelId,
-                    model: model,
-                    attributes: attributes,
-                    filters: filtersId,
-                    fields: fieldsId
-                },
-            });
+        if(images) {
+            otherEntities.push(images);
         }
+        if(prices) {
+            otherEntities.push(prices);
+        }
+
+        var data = {
+            modelsId: modelsId.join(','),
+            attributes: attributes.join(','),
+            filters: filtersId.join(','),
+            fields: fieldsId.join(','),
+            otherEntities: otherEntities.join(','),
+        };
+        var count = attributes.length + filtersId.length + fieldsId.length;
+
+        if(count || images || prices) {
+            $(dvizh.shop.linkMassUpdate).data('params', data).attr('data-params', data);
+            $(dvizh.shop.linkMassUpdate).trigger('click');
+        } else {
+            dvizh.shop.showNotification();
+        }
+
+
     },
     uncheckAllCheckboxes: function () {
         var type = $(this).data('type');
@@ -113,6 +130,9 @@ dvizh.shop = {
                 }
             });
         }
+    },
+    showNotification: function () {
+        $('.notification-error').slideToggle("2000");
     },
 };
 
