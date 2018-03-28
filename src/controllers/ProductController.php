@@ -47,12 +47,14 @@ class ProductController extends Controller
         $models = $dataProvider->models;
         if(!empty($models)) $model = array_shift($models);
         $filters = \dvizh\filter\models\Filter::find()->all();
+        $ignoreAttribute =  ['amount_in_stock', 'images'];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
             'filters' => $filters,
+            'ignoreAttribute' => $ignoreAttribute,
         ]);
     }
 
